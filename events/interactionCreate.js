@@ -1,0 +1,29 @@
+const { Events } = require('discord.js');
+
+// Event Listener for Bot command interaction
+// if interaction is not a command -> return an do nothing
+// if command is not log to error console and do nothing
+// if command execures great!
+// if command fails reply the error to the user
+module.exports = {
+	name: Events.InteractionCreate,
+	async execute(interaction) {
+		if (!interaction.isChatInputCommand()) return;
+
+		const command = interaction.client.commands.get(interaction.commandName);
+
+		if (!command) {
+			console.error(`No command matching ${interaction.commandName} was found.`);
+			return;
+		}
+
+		try {
+			await command.execute(interaction);
+		}
+		catch (error) {
+			console.error(`Error executing ${interaction.commandName}`);
+			console.error(error);
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	},
+};
