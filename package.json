@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/HerrViseron/NitradisBot/issues"
   },
-  "homepage": "https://github.com/HerrViseron/NitradisBot#readme"
+  "homepage": "https://github.com/HerrViseron/NitradisBot#readme",
+  "dependencies": {
+    "discord.js": "^14.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.27.0"
+  }
 }
