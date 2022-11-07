@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/HerrViseron/NitradisBot#readme",
   "dependencies": {
-    "discord.js": "^14.6.0"
+    "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "eslint": "^8.27.0"
