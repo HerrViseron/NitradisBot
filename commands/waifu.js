@@ -11,19 +11,20 @@ module.exports = {
 				.setDescription('Should we search for NSFW pictures? (In that case the response will only be shown to you!)'),
 		),
 	async execute(interaction) {
-		const nsfw = interaction.options.getBoolean('nsfw') ?? false;
-		if (!nsfw) {
-			await interaction.deferReply({ fetchReply: true });
+		const is_nsfw = interaction.options.getBoolean('nsfw') ?? false;
+		if (!is_nsfw) {
+			await interaction.deferReply();
 		}
-		else {
-			await interaction.deferReply({ ephemeral: true, fetchReply: true });
+		else if (is_nsfw) {
+			await interaction.deferReply({ ephemeral: true });
 		}
 
-		const query = new URLSearchParams({ nsfw });
+		const query = new URLSearchParams({ is_nsfw });
 
 		const waifuResult = await request(`https://api.waifu.im/random/?${query}`);
-		const { url } = await waifuResult.body.json();
+		const { images } = await waifuResult.body.json();
 
-		await interaction.editReply({ content: 'Here is your random Waifu!', files: [url] });
+		// await interaction.editReply({ files: [{ attachment: url, name: 'waifu.jpg' }] });
+		await interaction.editReply({ content: 'Here is you random Waifu!', files: [images[0].url] });
 	},
 };
