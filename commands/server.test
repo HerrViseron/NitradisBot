@@ -1,0 +1,52 @@
+const { SlashCommandBuilder } = require('discord.js');
+const { request } = require('undici');
+
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('server')
+		.setDescription('Display information or control a Nitrado Gameserver.')
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('info')
+				.setDescription('Display Server info.')
+				.addIntegerOption(option =>
+					option
+						.setName('serverid')
+						.setDescription('The ServerID to display info for.')
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('start')
+				.setDescription('Start the server.')
+				.addIntegerOption(option =>
+					option
+						.setName('serverid')
+						.setDescription('The ServerID to start.')
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('stop')
+				.setDescription('Stop a running server.')
+				.addIntegerOption(option =>
+					option
+						.setName('serverid')
+						.setDescription('The ServerID to stop.')
+				),
+		),
+	async execute(interaction) {
+		if (interaction.options.getSubcommands() === 'info') {
+			const serverID ) interaction.options.getInteger('serverid')
+		}
+		else if (interaction.options.getSubcommands() === 'start') {
+
+		}
+		else if (interaction.options.getSubcommands() === 'stop') {
+
+		}
+
+		// interaction.guild is the object representing the Guild in which the command was run
+		await interaction.reply({ content: `You are on ${interaction.guild.name}, which has ${interaction.guild.memberCount} members.`, ephemeral: true });
+	},
+};
