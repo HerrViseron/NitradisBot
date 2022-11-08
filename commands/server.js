@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, channelLink } = require('discord.js');
 const { request } = require('undici');
 
 module.exports = {
@@ -46,8 +46,51 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === 'info') {
 			const infoResult = await request(`https://api.nitrado.net/services/${serverID}/gameservers`, { headers: { authorization: process.env.NITRAPI_TOKEN } });
-			const { data: { status, ip, port, query_port, game, game_human } } = await infoResult.body.json();
-			await interaction.editReply(`Server Status: ${status}, Server IP: ${ip}, Server Port: ${port}, Server Query Port: ${query_port}, Server Game: ${game}, Server Game Human: ${game_human}`);
+			const jsonResult = await infoResult.body.json();
+
+			const { 'status': requestStatus, message } = jsonResult;
+
+			if (requestStatus === 'success') {
+				const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
+				const servername = name ?? game_human;
+
+				const serverInfo = new EmbedBuilder()
+					.setColor(0x0099FF)
+					.setTitle(servername)
+					.setDescription(`${status} Game: ${game_human}`)
+					.addFields(
+						{ name: 'IP Address', value: `${ip}` },
+						{ name: 'Game Port', value: `${port}` },
+						{ name: 'Query Port', value: `${query_port}` },
+					)
+					.setTimestamp();
+
+				if (status === 'started') {
+					serverInfo.setColor(0x00B000);
+				}
+				else if (status === 'stopped') {
+					serverInfo.setColor(0xF00000);
+				}
+				else if (status === 'restarting') {
+					serverInfo.setColor(0xFFEA00);
+				}
+				else if (status === 'stopping') {
+					serverInfo.setColor(0xFFEA00);
+				}
+
+				/*
+				await interaction.editReply(`Request Status: ${requestStatus}, Server Status: ${status}, Server Name: ${servername} Server IP: ${ip}, Server Port: ${port}, Server Query Port: ${query_port}, Server Game: ${game}, Server Game Human: ${game_human}
+	Settings Name: ${name}`);
+				*/
+				// await interaction.deleteReply();
+				await interaction.editReply({ embeds: [serverInfo] });
+				// await message.channel.send({ embed: [serverInfo] });
+
+			}
+			else {
+				await interaction.editReply(`There was an error while contacting the NitrAPI: ${message}`);
+			}
+
 		}
 		else if (interaction.options.getSubcommand() === 'start') {
 			await interaction.editReply('Command is still WIP!');
