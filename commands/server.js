@@ -10,15 +10,12 @@ module.exports = {
 			subcommand
 				.setName('delete')
 				.setDescription('Delete server entry from Database.')
-				.addIntegerOption(option =>
+				.addStringOption(option =>
 					option
 						.setName('server-name')
-						.setDescription('The Servername to detele from the database. (Not the in game Name!) '),
-				)
-				.addIntegerOption(option =>
-					option
-						.setName('serverid')
-						.setDescription('The ServerID to delete from the database.'),
+						.setDescription('The Servername to detele from the database. (Not the in game Name!) ')
+						.setRequired(true)
+						.setAutocomplete(true),
 				),
 		)
 		.addSubcommand(subcommand =>
@@ -106,7 +103,17 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === 'delete') {
 			await interaction.deferReply({ ephemeral: true });
-			await interaction.editReply('Command is still WIP!');
+
+			const serverName = interaction.options.getString('server-name');
+
+			try {
+				await db.Server.destroy({ where: { displayname: serverName } });
+
+				return interaction.editReply(`Server "${serverName}" successfully deleted from database.`);
+			}
+			catch (error) {
+				return interaction.editReply(`Something went wrong with adding the server. Error: ${error.name}: ${error.message}`);
+			}
 		}
 		else if (interaction.options.getSubcommand() === 'import') {
 			await interaction.deferReply({ ephemeral: true });
@@ -143,8 +150,6 @@ module.exports = {
 				await interaction.editReply(`Server "${serverName}" not found in database!`);
 			}
 			else {
-				console.log(serverData);
-
 				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
 				const jsonResult = await infoResult.body.json();
 
@@ -154,37 +159,39 @@ module.exports = {
 					const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
 					const servername = name ?? game_human;
 
-					const serverInfo = new EmbedBuilder()
-						.setColor(0x0099FF)
-						.setTitle(servername)
-						.setDescription(`${status} Game: ${game_human}`)
-						.addFields(
-							{ name: 'IP Address', value: `${ip}` },
-							{ name: 'Game Port', value: `${port}` },
-							{ name: 'Query Port', value: `${query_port}` },
-						)
-						.setTimestamp();
-
-					if (status === 'started') {
+					const serverInfo = new EmbedBuilder();
+					serverInfo.setColor(0xA8A8A8);
+					let statusIcon = '⚪';
+					switch (status) {
+					case 'started':
+						statusIcon = '🟢';
 						serverInfo.setColor(0x00B000);
-					}
-					else if (status === 'stopped') {
+						break;
+					case 'stopped':
+						statusIcon = '🔴';
 						serverInfo.setColor(0xF00000);
-					}
-					else if (status === 'restarting') {
+						break;
+					case 'restarting':
+						statusIcon = '🟡';
 						serverInfo.setColor(0xFFEA00);
-					}
-					else if (status === 'stopping') {
+						break;
+					case 'stopping':
+						statusIcon = '🟡';
 						serverInfo.setColor(0xFFEA00);
+						break;
 					}
 
-					/*
-					await interaction.editReply(`Request Status: ${requestStatus}, Server Status: ${status}, Server Name: ${servername} Server IP: ${ip}, Server Port: ${port}, Server Query Port: ${query_port}, Server Game: ${game}, Server Game Human: ${game_human}
-		Settings Name: ${name}`);
-					*/
-					// await interaction.deleteReply();
+					serverInfo.setTitle(servername);
+					serverInfo.setDescription(`${statusIcon} ${game_human}`);
+					serverInfo.setThumbnail(`https://static.nitrado.net/cdn/gameicons/256/${game}.jpg`);
+					serverInfo.addFields(
+						{ name: 'IP Address', value: `${ip}` },
+						{ name: 'Game Port', value: `${port}`, inline: true },
+						{ name: 'Query Port', value: `${query_port}`, inline: true },
+					);
+					serverInfo.setTimestamp();
+
 					await interaction.editReply({ embeds: [serverInfo] });
-					// await message.channel.send({ embed: [serverInfo] });
 
 				}
 				else {
