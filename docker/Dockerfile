@@ -9,7 +9,7 @@ WORKDIR /usr/src/nitradisbot
 COPY --chown=node:node . .
 
 RUN npm install pm2 -g && \
-	npm ci --only=production
+	npm ci --omit=dev
 
 USER node
 
