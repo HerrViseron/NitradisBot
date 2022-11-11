@@ -29,7 +29,13 @@ module.exports = {
 				.addIntegerOption(option =>
 					option
 						.setName('server-name')
-						.setDescription('Displayname for the server. Not the actual name which will be used in game, but this name is used for all comannds refering a server. This name will be used for command autocompletion.')
+						.setDescription('Displayname for the server (max. 25 Characters). Not the actual name which will be used in game, but this name is used for all comannds refering a server. This name will be used for command autocompletion.')
+						.setRequired(true),
+				)
+				.addIntegerOption(option =>
+					option
+						.setName('nitrado-token')
+						.setDescription('API Token to use for this server.')
 						.setRequired(true),
 				),
 		)

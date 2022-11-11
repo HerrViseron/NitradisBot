@@ -5,11 +5,14 @@ dotenv.config();
 const fs = require('node:fs');
 const path = require('node:path');
 
+
 // Require the necessary discord.js classes
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 // const internal = require('node:stream');
 // This Bot uses and .env file for configuration, but the config.json line is still here
 // const { token } = require('./config.json');
+
+// Require section END
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
