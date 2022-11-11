@@ -8,8 +8,7 @@ WORKDIR /usr/src/nitradisbot
 
 COPY --chown=node:node . .
 
-RUN rm -r ./docker && \
-	npm install pm2 -g && \
+RUN npm install pm2 -g && \
 	npm ci --only=production
 
 USER node
