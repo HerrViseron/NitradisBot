@@ -11,7 +11,7 @@ WORKDIR /usr/src/nitradisbot
 COPY --chown=node:node . .
 
 RUN groupmod -g 90 users && \
-	groupmod -g ${UID} node && \
+	groupmod -g ${GID} node && \
 	usermod -u ${UID} -g ${GID} node && \
 	rm Dockerfile && \
 	npm install pm2 -g && \
