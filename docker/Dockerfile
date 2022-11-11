@@ -6,7 +6,7 @@ ENV NODE_ENV production
 
 WORKDIR /usr/src/nitradisbot
 
-COPY --chown=node:node . .
+COPY --chown=node:node . /usr/src/nitradisbot
 
 RUN npm install pm2 -g && \
 	npm ci --omit=dev
