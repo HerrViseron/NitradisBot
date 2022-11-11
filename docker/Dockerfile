@@ -6,9 +6,9 @@ ENV NODE_ENV production
 
 WORKDIR /usr/src/nitradisbot
 
-RUN git clone https://github.com/HerrViseron/NitradisBot.git . && \
-	rm -r ./docker && \
-	chown -R node:node /usr/src/nitradisbot && \
+COPY --chown=node:node . .
+
+RUN rm -r ./docker && \
 	npm install pm2 -g && \
 	npm ci --only=production
 
