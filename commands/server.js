@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, channelLink } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, channelLink, AutocompleteInteraction } = require('discord.js');
 const { request } = require('undici');
 const db = require('../database.js');
 
@@ -52,11 +52,12 @@ module.exports = {
 			subcommand
 				.setName('info')
 				.setDescription('Display Server info.')
-				.addIntegerOption(option =>
+				.addStringOption(option =>
 					option
-						.setName('serverid')
+						.setName('server-name')
 						.setDescription('The ServerID to display info for.')
-						.setRequired(true),
+						.setRequired(true)
+						.setAutocomplete(true),
 				),
 		)
 		.addSubcommand(subcommand =>
@@ -86,6 +87,19 @@ module.exports = {
 						.setRequired(true),
 				),
 		),
+	async autocomplete(interaction) {
+		const focusedOption = interaction.options.getFocused(true);
+		let choices;
+
+		if (focusedOption.name === 'server-name') {
+			const serverList = await db.Server.findAll({ attributes: ['displayname'] });
+			choices = serverList.map(s => s.displayname);
+		}
+		const filtered = choices.filter(choice => choice.startsWith(focusedOption.value));
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		);
+	},
 	async execute(interaction) {
 		// It depends on the Subcommand if the response should be epemeral or not!
 		// await interaction.deferReply();
@@ -121,52 +135,61 @@ module.exports = {
 		else if (interaction.options.getSubcommand() === 'info') {
 			await interaction.deferReply();
 
-			const serverID = interaction.options.getInteger('serverid');
+			const serverName = interaction.options.getString('server-name');
 
-			const infoResult = await request(`https://api.nitrado.net/services/${serverID}/gameservers`, { headers: { authorization: process.env.NITRAPI_TOKEN } });
-			const jsonResult = await infoResult.body.json();
+			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
 
-			const { 'status': requestStatus, message } = jsonResult;
-
-			if (requestStatus === 'success') {
-				const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
-				const servername = name ?? game_human;
-
-				const serverInfo = new EmbedBuilder()
-					.setColor(0x0099FF)
-					.setTitle(servername)
-					.setDescription(`${status} Game: ${game_human}`)
-					.addFields(
-						{ name: 'IP Address', value: `${ip}` },
-						{ name: 'Game Port', value: `${port}` },
-						{ name: 'Query Port', value: `${query_port}` },
-					)
-					.setTimestamp();
-
-				if (status === 'started') {
-					serverInfo.setColor(0x00B000);
-				}
-				else if (status === 'stopped') {
-					serverInfo.setColor(0xF00000);
-				}
-				else if (status === 'restarting') {
-					serverInfo.setColor(0xFFEA00);
-				}
-				else if (status === 'stopping') {
-					serverInfo.setColor(0xFFEA00);
-				}
-
-				/*
-				await interaction.editReply(`Request Status: ${requestStatus}, Server Status: ${status}, Server Name: ${servername} Server IP: ${ip}, Server Port: ${port}, Server Query Port: ${query_port}, Server Game: ${game}, Server Game Human: ${game_human}
-	Settings Name: ${name}`);
-				*/
-				// await interaction.deleteReply();
-				await interaction.editReply({ embeds: [serverInfo] });
-				// await message.channel.send({ embed: [serverInfo] });
-
+			if (serverData === null) {
+				await interaction.editReply(`Server "${serverName}" not found in database!`);
 			}
 			else {
-				await interaction.editReply(`There was an error while contacting the NitrAPI: ${message}`);
+				console.log(serverData);
+
+				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
+				const jsonResult = await infoResult.body.json();
+
+				const { 'status': requestStatus, message } = jsonResult;
+
+				if (requestStatus === 'success') {
+					const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
+					const servername = name ?? game_human;
+
+					const serverInfo = new EmbedBuilder()
+						.setColor(0x0099FF)
+						.setTitle(servername)
+						.setDescription(`${status} Game: ${game_human}`)
+						.addFields(
+							{ name: 'IP Address', value: `${ip}` },
+							{ name: 'Game Port', value: `${port}` },
+							{ name: 'Query Port', value: `${query_port}` },
+						)
+						.setTimestamp();
+
+					if (status === 'started') {
+						serverInfo.setColor(0x00B000);
+					}
+					else if (status === 'stopped') {
+						serverInfo.setColor(0xF00000);
+					}
+					else if (status === 'restarting') {
+						serverInfo.setColor(0xFFEA00);
+					}
+					else if (status === 'stopping') {
+						serverInfo.setColor(0xFFEA00);
+					}
+
+					/*
+					await interaction.editReply(`Request Status: ${requestStatus}, Server Status: ${status}, Server Name: ${servername} Server IP: ${ip}, Server Port: ${port}, Server Query Port: ${query_port}, Server Game: ${game}, Server Game Human: ${game_human}
+		Settings Name: ${name}`);
+					*/
+					// await interaction.deleteReply();
+					await interaction.editReply({ embeds: [serverInfo] });
+					// await message.channel.send({ embed: [serverInfo] });
+
+				}
+				else {
+					await interaction.editReply(`There was an error while contacting the NitrAPI: ${message} ${serverData.id} ${serverData.nitradotoken}`);
+				}
 			}
 
 		}

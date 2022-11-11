@@ -37,13 +37,13 @@ const Server = sequelize.define('server', {
 		primaryKey: true,
 	},
 	displayname: {
-		type: Sequelize.STRING(),
+		type: Sequelize.STRING(25),
 		unique: true,
 		defaultValue: 'Nameless Server',
 		allowNull: false,
 	},
 	nitradotoken: {
-		type: Sequelize.STRING(),
+		type: Sequelize.STRING(100),
 		defaultValue: 'no-token',
 		allowNull: false,
 	},
