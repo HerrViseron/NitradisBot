@@ -6,7 +6,7 @@ const db = {};
 db.Sequelize = Sequelize;
 
 // Database File location is dependet on the system platform
-// for Linux the file will be under /var/nitradisbot/
+// for Linux the file will be under /var/lib/nitradisbot/
 // for win32 the file will be under %AppData/nitradisbot/
 // for everything else the file will be in the same directory as the App Files
 let dbPath = '';
