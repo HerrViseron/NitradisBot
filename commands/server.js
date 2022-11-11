@@ -19,7 +19,7 @@ module.exports = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('import')
-				.setDescription('Import Server ID into the Bot\'s Database. Imported Servers will be available for control and autopcomplete in commands.')
+				.setDescription('Import Server ID into the Bot\'s Database.')
 				.addIntegerOption(option =>
 					option
 						.setName('serverid')
@@ -29,7 +29,7 @@ module.exports = {
 				.addIntegerOption(option =>
 					option
 						.setName('server-name')
-						.setDescription('Displayname for the server (max. 25 Characters). Not the actual name which will be used in game, but this name is used for all comannds refering a server. This name will be used for command autocompletion.')
+						.setDescription('Displayname for the server. (max. 25 Characters, used for command autocompletion)')
 						.setRequired(true),
 				)
 				.addIntegerOption(option =>

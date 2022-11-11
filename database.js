@@ -6,7 +6,8 @@ const sequelize = new Sequelize({
 	dialect: 'sqlite',
 	logging: false,
 	// SQLite only
-	storage: '/var/lib/nitradisbot/nitradisbot.sqlite',
+	// storage: '/var/lib/nitradisbot/nitradisbot.sqlite',
+	storage: 'nitradisbot.sqlite',
 });
 
 // Create Database Model
@@ -14,6 +15,8 @@ const Server = sequelize.define('server', {
 	id: {
 		type: Sequelize.INTEGER,
 		unique: true,
+		autoIncrement: false,
+		primaryKey: true,
 	},
 	displayname: {
 		type: Sequelize.STRING(25),
@@ -27,9 +30,5 @@ const Server = sequelize.define('server', {
 	},
 });
 
-module.exports = {
-	name: Server.Sync,
-	execute() {
-		Server.sync();
-	},
-};
+module.exports = sequelize;
+module.exports = Server;
