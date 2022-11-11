@@ -38,6 +38,7 @@ const Server = sequelize.define('server', {
 	},
 	displayname: {
 		type: Sequelize.STRING(),
+		unique: true,
 		defaultValue: 'Nameless Server',
 		allowNull: false,
 	},
