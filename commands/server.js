@@ -66,22 +66,36 @@ module.exports = {
 			subcommand
 				.setName('start')
 				.setDescription('Start the server.')
-				.addIntegerOption(option =>
+				.addStringOption(option =>
 					option
-						.setName('serverid')
-						.setDescription('The ServerID to start.')
-						.setRequired(true),
+						.setName('server-name')
+						.setDescription('The Server to start.')
+						.setRequired(true)
+						.setAutocomplete(true),
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('restart')
+				.setDescription('Restart the running server.')
+				.addStringOption(option =>
+					option
+						.setName('server-name')
+						.setDescription('The Server to restart.')
+						.setRequired(true)
+						.setAutocomplete(true),
 				),
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('stop')
 				.setDescription('Stop a running server.')
-				.addIntegerOption(option =>
+				.addStringOption(option =>
 					option
-						.setName('serverid')
-						.setDescription('The ServerID to stop.')
-						.setRequired(true),
+						.setName('server-name')
+						.setDescription('The Server to stop.')
+						.setRequired(true)
+						.setAutocomplete(true),
 				),
 		),
 	async autocomplete(interaction) {
@@ -153,7 +167,7 @@ module.exports = {
 				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
 				const jsonResult = await infoResult.body.json();
 
-				const { 'status': requestStatus, message } = jsonResult;
+				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 
 				if (requestStatus === 'success') {
 					const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
@@ -195,7 +209,7 @@ module.exports = {
 
 				}
 				else {
-					await interaction.editReply(`There was an error while contacting the NitrAPI: ${message} ${serverData.id} ${serverData.nitradotoken}`);
+					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
 				}
 			}
 
@@ -211,12 +225,80 @@ module.exports = {
 		else if (interaction.options.getSubcommand() === 'start') {
 			await interaction.deferReply();
 
-			await interaction.editReply('Command is still WIP!');
+			const serverName = interaction.options.getString('server-name');
+
+			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
+
+			if (serverData === null) {
+				await interaction.editReply(`Server "${serverName}" not found in database!`);
+			}
+			else {
+				const message = `Start via NitradisBot, from Server: ${interaction.guild.name}, by User: ${interaction.user.username}`;
+				const query = new URLSearchParams({ message });
+				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/restart?${query}`, { headers: { authorization: serverData.nitradotoken }, method: 'POST' });
+				const jsonResult = await infoResult.body.json();
+
+				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
+
+				if (requestStatus === 'success') {
+					await interaction.editReply(`The server "${serverName}" will now start.`);
+				}
+				else {
+					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
+				}
+			}
+		}
+		else if (interaction.options.getSubcommand() === 'restart') {
+			await interaction.deferReply();
+
+			const serverName = interaction.options.getString('server-name');
+
+			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
+
+			if (serverData === null) {
+				await interaction.editReply(`Server "${serverName}" not found in database!`);
+			}
+			else {
+				const message = `Restart via NitradisBot, from Server: ${interaction.guild.name}, by User: ${interaction.user.username}`;
+				const query = new URLSearchParams({ message });
+				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/restart?${query}`, { headers: { authorization: serverData.nitradotoken }, method: 'POST' });
+				const jsonResult = await infoResult.body.json();
+
+				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
+
+				if (requestStatus === 'success') {
+					await interaction.editReply(`The server "${serverName}" will now restart.`);
+				}
+				else {
+					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
+				}
+			}
 		}
 		else if (interaction.options.getSubcommand() === 'stop') {
 			await interaction.deferReply();
 
-			await interaction.editReply('Command is still WIP!');
+			const serverName = interaction.options.getString('server-name');
+
+			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
+
+			if (serverData === null) {
+				await interaction.editReply(`Server "${serverName}" not found in database!`);
+			}
+			else {
+				const message = `Stop via NitradisBot, from Server: ${interaction.guild.name}, by User: ${interaction.user.username}`;
+				const query = new URLSearchParams({ message });
+				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/stop?${query}`, { headers: { authorization: serverData.nitradotoken }, method: 'POST' });
+				const jsonResult = await infoResult.body.json();
+
+				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult; 
+
+				if (requestStatus === 'success') {
+					await interaction.editReply(`The server "${serverName}" will now stop.`);
+				}
+				else {
+					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
+				}
+			}
 		}
 
 	},
