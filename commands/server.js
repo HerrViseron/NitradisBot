@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, channelLink, AutocompleteInteraction } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, channelLink, AutocompleteInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { request } = require('undici');
 const db = require('../database.js');
 
@@ -173,6 +173,21 @@ module.exports = {
 					const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
 					const servername = name ?? game_human;
 
+					const buttonServerStart = new ButtonBuilder()
+						.setCustomId('serverStart')
+						.setLabel('Start')
+						.setStyle(ButtonStyle.Success);
+
+					const buttonServerRestart = new ButtonBuilder()
+						.setCustomId('serverRestart')
+						.setLabel('Restart')
+						.setStyle(ButtonStyle.Secondary);
+
+					const buttonServerStop = new ButtonBuilder()
+						.setCustomId('serverStop')
+						.setLabel('Stop')
+						.setStyle(ButtonStyle.Danger);
+
 					const serverInfo = new EmbedBuilder();
 					serverInfo.setColor(0xA8A8A8);
 					let statusIcon = '⚪';
@@ -180,20 +195,34 @@ module.exports = {
 					case 'started':
 						statusIcon = '🟢';
 						serverInfo.setColor(0x00B000);
+						buttonServerStart.setDisabled(true);
+						buttonServerRestart.setDisabled(false);
+						buttonServerStop.setDisabled(false);
 						break;
 					case 'stopped':
 						statusIcon = '🔴';
 						serverInfo.setColor(0xF00000);
+						buttonServerStart.setDisabled(false);
+						buttonServerRestart.setDisabled(true);
+						buttonServerStop.setDisabled(true);
 						break;
 					case 'restarting':
 						statusIcon = '🟡';
 						serverInfo.setColor(0xFFEA00);
+						buttonServerStart.setDisabled(true);
+						buttonServerRestart.setDisabled(true);
+						buttonServerStop.setDisabled(false);
 						break;
 					case 'stopping':
-						statusIcon = '🟡';
+						statusIcon = '🟠';
 						serverInfo.setColor(0xFFEA00);
+						buttonServerStart.setDisabled(true);
+						buttonServerRestart.setDisabled(true);
+						buttonServerStop.setDisabled(false);
 						break;
 					}
+
+					const serverControlButtons = new ActionRowBuilder().addComponents(buttonServerStart, buttonServerRestart, buttonServerStop);
 
 					serverInfo.setTitle(servername);
 					serverInfo.setDescription(`${statusIcon} ${game_human}`);
@@ -205,7 +234,7 @@ module.exports = {
 					);
 					serverInfo.setTimestamp();
 
-					await interaction.editReply({ embeds: [serverInfo] });
+					await interaction.editReply({ embeds: [serverInfo], components: [serverControlButtons] });
 
 				}
 				else {
