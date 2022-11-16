@@ -61,6 +61,16 @@ module.exports = {
 						.setName('pin-message')
 						.setDescription('Should the message be pinned in the channel? Content will auto update every minute.')
 						.setRequired(false),
+				)
+				.addStringOption(option =>
+					option.setName('refresh')
+						.setDescription('Refresh interval for the pinned messages. (Only affects pinnes messages) ')
+						.setRequired(false)
+						.addChoices(
+							{ name: 'Every Minute', value: '0 * * * * *' },
+							{ name: 'Every 5 Minutes', value: '0 */5 * * * *' },
+							{ name: 'Every 10 Minutes', value: '0 */10 * * * *' },
+						),
 				),
 		)
 		.addSubcommand(subcommand =>
@@ -211,7 +221,29 @@ module.exports = {
 					);
 					serverInfo.setTimestamp();
 
-					await interaction.editReply({ embeds: [serverInfo], components: [serverControlButtons] });
+					const message = await interaction.editReply({ embeds: [serverInfo] });
+
+					if (interaction.options.getBoolean('pin-message')) {
+						await message.pin();
+						const crontabString = interaction.options.get('refresh');
+						try {
+							const messageCron = await db.serverInfoCron.create({
+								messageId: interaction.id,
+								servername: serverName,
+								crontabString: crontabString,
+							});
+
+							await message.pin();
+							await console.log(`Message: ${messageCron.imessageIdd}, for "${messageCron.servername}" was pinned and will be refreshed "${messageCron.crontabString}"`);
+						}
+						catch (error) {
+							if (error.name === 'SequelizeUniqueConstraintError') {
+								return interaction.editReply('That message is already in the schedules tables.');
+							}
+
+							return interaction.editReply(`Something went wrong while adding the message into the schedule table. Error: ${error.name}: ${error.message}`);
+						}
+					}
 
 				}
 				else {

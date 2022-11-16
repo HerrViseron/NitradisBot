@@ -9,6 +9,7 @@ module.exports = {
 		// Use db.Server.sync({ force: true }); for Dev Testing, resets Database on every App start
 		// in Prod use db.Server.sync();
 		db.Server.sync();
+		db.serverInfoCron.sync();
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 	},
 };
