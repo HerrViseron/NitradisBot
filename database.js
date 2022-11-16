@@ -50,6 +50,29 @@ const Server = sequelize.define('server', {
 });
 db.Server = Server;
 
+const Cron = sequelize.define('cron', {
+	messageId: {
+		type: Sequelize.INTEGER,
+		unique: true,
+		autoIncrement: false,
+		primaryKey: true,
+	},
+	command: {
+		type: Sequelize.STRING(32),
+		unique: true,
+		defaultValue: 'none',
+		allowNull: false,
+	},
+	crontabString: {
+		type: Sequelize.STRING(64),
+		unique: true,
+		// Default is every minute:
+		defaultValue: '0 * * * * *',
+		allowNull: false,
+	},
+});
+db.Cron = Cron;
+
 module.exports = db;
 
 // module.exports = sequelize;

@@ -4,6 +4,7 @@ dotenv.config();
 
 const fs = require('node:fs');
 const path = require('node:path');
+const cron = require('node-cron');
 
 // Require the necessary discord.js classes
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
