@@ -43,16 +43,16 @@ module.exports = {
 			}
 		}
 		else if (interaction.isButton()) {
-
-			const command = interaction.client.commands.get(interaction.customId);
+			console.log(interaction);
+			const command = interaction.client.commands.get(interaction.commandName);
 
 			if (!command) {
-				console.error(`No button interaction matching ${interaction.customId} was found.`);
+				console.error(`No command matching ${interaction.commandName} was found.`);
 				return;
 			}
 
 			try {
-				await command.buttonClick(interaction);
+				await command.autocomplete(interaction);
 			}
 			catch (error) {
 				console.error(error);

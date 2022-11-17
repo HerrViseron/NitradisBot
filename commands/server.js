@@ -111,20 +111,6 @@ module.exports = {
 			filtered.map(choice => ({ name: choice, value: choice })),
 		);
 	},
-	async buttonClick(interaction) {
-		if (interaction.customId === 'serverStart') {
-			await interaction.deferReply({ ephemeral: false });
-			console.log(' SClicked Servertart!');
-			// const serverName = interaction.options.getString('server-name');
-
-			try {
-				return interaction.editReply(' SClicked Servertart!');
-			}
-			catch (error) {
-				return interaction.editReply(`Something went wrong with adding the server. Error: ${error.name}: ${error.message}`);
-			}
-		}
-	},
 	async execute(interaction) {
 		// It depends on the Subcommand if the response should be epemeral or not!
 		// await interaction.deferReply();
