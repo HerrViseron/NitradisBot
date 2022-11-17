@@ -42,5 +42,21 @@ module.exports = {
 				console.error(error);
 			}
 		}
+		else if (interaction.isButton()) {
+
+			const command = interaction.client.commands.get(interaction.customId);
+
+			if (!command) {
+				console.error(`No button interaction matching ${interaction.customId} was found.`);
+				return;
+			}
+
+			try {
+				await command.buttonClick(interaction);
+			}
+			catch (error) {
+				console.error(error);
+			}
+		}
 	},
 };
