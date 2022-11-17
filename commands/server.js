@@ -55,12 +55,6 @@ module.exports = {
 						.setDescription('The ServerID to display info for.')
 						.setRequired(true)
 						.setAutocomplete(true),
-				)
-				.addBooleanOption(option =>
-					option
-						.setName('pin-message')
-						.setDescription('Should the message be pinned in the channel? Content will auto update every minute.')
-						.setRequired(false),
 				),
 		)
 		.addSubcommand(subcommand =>
