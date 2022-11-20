@@ -50,6 +50,24 @@ const Server = sequelize.define('server', {
 });
 db.Server = Server;
 
+const ServerInfoCron = sequelize.define('serverInfoCron', {
+	messageId: {
+		type: Sequelize.STRING(20),
+		unique: true,
+		primaryKey: true,
+	},
+	channelId: {
+		type: Sequelize.STRING(20),
+	},
+	servername: {
+		type: Sequelize.STRING(25),
+		unique: true,
+		defaultValue: 'none',
+		allowNull: false,
+	},
+});
+db.ServerInfoCron = ServerInfoCron;
+
 module.exports = db;
 
 // module.exports = sequelize;

@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder, channelLink, AutocompleteInteraction } = require('discord.js');
 const { request } = require('undici');
 const db = require('../database.js');
+const cron = require('node-cron');
+const messageUpdater = require('../messageUpdater');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -55,6 +57,12 @@ module.exports = {
 						.setDescription('The ServerID to display info for.')
 						.setRequired(true)
 						.setAutocomplete(true),
+				)
+				.addBooleanOption(option =>
+					option
+						.setName('pin-message')
+						.setDescription('Should the message be pinned in the channel? Content will auto update every minute.')
+						.setRequired(false),
 				),
 		)
 		.addSubcommand(subcommand =>
@@ -94,6 +102,18 @@ module.exports = {
 					option
 						.setName('server-name')
 						.setDescription('The Server to stop.')
+						.setRequired(true)
+						.setAutocomplete(true),
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('unpin')
+				.setDescription('Unpin a Server Info Message and remove od from autoupdate.')
+				.addStringOption(option =>
+					option
+						.setName('server-name')
+						.setDescription('The Server to remove the Message for')
 						.setRequired(true)
 						.setAutocomplete(true),
 				),
@@ -157,6 +177,7 @@ module.exports = {
 			await interaction.deferReply();
 
 			const serverName = interaction.options.getString('server-name');
+			const pinMessage = interaction.options.getBoolean('pin-message') ?? false;
 
 			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
 
@@ -205,7 +226,32 @@ module.exports = {
 					);
 					serverInfo.setTimestamp();
 
-					await interaction.editReply({ embeds: [serverInfo] });
+					if (pinMessage) {
+						serverInfo.setFooter({ text: 'This Message will update every minute!' });
+					}
+					const message = await interaction.editReply({ embeds: [serverInfo] });
+
+					if (pinMessage) {
+
+						try {
+
+							await db.ServerInfoCron.create({
+								messageId: message.id,
+								channelId: interaction.channelId,
+								servername: serverName,
+							});
+
+							await message.pin();
+
+						}
+						catch (error) {
+							if (error.name === 'SequelizeUniqueConstraintError') {
+								return interaction.editReply('That Server or Message is already in the schedules tables.');
+							}
+
+							return interaction.editReply(`Something went wrong while adding the message into the schedule table. Error: ${error.name}: ${error.message}`);
+						}
+					}
 
 				}
 				else {
@@ -298,6 +344,36 @@ module.exports = {
 				else {
 					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
 				}
+			}
+		}
+		else if (interaction.options.getSubcommand() === 'unpin') {
+			await interaction.deferReply({ ephemeral: true });
+
+			const serverName = interaction.options.getString('server-name');
+
+			const serverInfoMessage = await db.ServerInfoCron.findOne({ where: { servername: serverName } });
+
+			if (serverInfoMessage === null) {
+				await interaction.editReply(`No Message found for Server "${serverName}"!`);
+			}
+			else {
+				try {
+					const channel = await interaction.client.channels.fetch(serverInfoMessage.channelId);
+					const message = await channel.messages.fetch(serverInfoMessage.messageId);
+					message.unpin();
+
+					const serverInfoMessageCount = await db.ServerInfoCron.destroy({ where: { servername: serverName } });
+
+					if (!serverInfoMessageCount) {
+						await interaction.editReply(`No Message in database for server "${serverName}"!`);
+					}
+
+					await interaction.editReply(`Message for server "${serverName}" successfully unpinned and deleted from database!`);
+				}
+				catch (error) {
+					await interaction.editReply(`Unable to unpin message. Error: "${error}"!`);
+				}
+
 			}
 		}
 
