@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, channelLink, AutocompleteInteraction } = require('discord.js');
 const { request } = require('undici');
 const db = require('../database.js');
 const cron = require('node-cron');
@@ -211,7 +211,7 @@ module.exports = {
 						serverInfo.setColor(0xFFEA00);
 						break;
 					case 'stopping':
-						statusIcon = '🟠';
+						statusIcon = '🟡';
 						serverInfo.setColor(0xFFEA00);
 						break;
 					}
