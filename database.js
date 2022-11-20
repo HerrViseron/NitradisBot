@@ -50,12 +50,14 @@ const Server = sequelize.define('server', {
 });
 db.Server = Server;
 
-const serverInfoCron = sequelize.define('serverInfoCron', {
+const ServerInfoCron = sequelize.define('serverInfoCron', {
 	messageId: {
-		type: Sequelize.INTEGER,
+		type: Sequelize.STRING(20),
 		unique: true,
-		autoIncrement: false,
 		primaryKey: true,
+	},
+	channelId: {
+		type: Sequelize.STRING(20),
 	},
 	servername: {
 		type: Sequelize.STRING(25),
@@ -63,15 +65,8 @@ const serverInfoCron = sequelize.define('serverInfoCron', {
 		defaultValue: 'none',
 		allowNull: false,
 	},
-	crontabString: {
-		type: Sequelize.STRING(64),
-		unique: true,
-		// Default is every minute:
-		defaultValue: '0 * * * * *',
-		allowNull: false,
-	},
 });
-db.serverInfoCron = serverInfoCron;
+db.ServerInfoCron = ServerInfoCron;
 
 module.exports = db;
 

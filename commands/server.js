@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { request } = require('undici');
 const db = require('../database.js');
+const cron = require('node-cron');
+const messageUpdater = require('../messageUpdater');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -61,16 +63,6 @@ module.exports = {
 						.setName('pin-message')
 						.setDescription('Should the message be pinned in the channel? Content will auto update every minute.')
 						.setRequired(false),
-				)
-				.addStringOption(option =>
-					option.setName('refresh')
-						.setDescription('Refresh interval for the pinned messages. (Only affects pinnes messages) ')
-						.setRequired(false)
-						.addChoices(
-							{ name: 'Every Minute', value: '0 * * * * *' },
-							{ name: 'Every 5 Minutes', value: '0 */5 * * * *' },
-							{ name: 'Every 10 Minutes', value: '0 */10 * * * *' },
-						),
 				),
 		)
 		.addSubcommand(subcommand =>
@@ -110,6 +102,18 @@ module.exports = {
 					option
 						.setName('server-name')
 						.setDescription('The Server to stop.')
+						.setRequired(true)
+						.setAutocomplete(true),
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('unpin')
+				.setDescription('Unpin a Server Info Message and remove od from autoupdate.')
+				.addStringOption(option =>
+					option
+						.setName('server-name')
+						.setDescription('The Server to remove the Message for')
 						.setRequired(true)
 						.setAutocomplete(true),
 				),
@@ -173,6 +177,7 @@ module.exports = {
 			await interaction.deferReply();
 
 			const serverName = interaction.options.getString('server-name');
+			const pinMessage = interaction.options.getBoolean('pin-message') ?? false;
 
 			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
 
@@ -221,24 +226,27 @@ module.exports = {
 					);
 					serverInfo.setTimestamp();
 
+					if (pinMessage) {
+						serverInfo.setFooter({ text: 'This Message will update every minute!' });
+					}
 					const message = await interaction.editReply({ embeds: [serverInfo] });
 
-					if (interaction.options.getBoolean('pin-message')) {
-						await message.pin();
-						const crontabString = interaction.options.get('refresh');
+					if (pinMessage) {
+
 						try {
-							const messageCron = await db.serverInfoCron.create({
-								messageId: interaction.id,
+
+							await db.ServerInfoCron.create({
+								messageId: message.id,
+								channelId: interaction.channelId,
 								servername: serverName,
-								crontabString: crontabString,
 							});
 
 							await message.pin();
-							await console.log(`Message: ${messageCron.imessageIdd}, for "${messageCron.servername}" was pinned and will be refreshed "${messageCron.crontabString}"`);
+
 						}
 						catch (error) {
 							if (error.name === 'SequelizeUniqueConstraintError') {
-								return interaction.editReply('That message is already in the schedules tables.');
+								return interaction.editReply('That Server or Message is already in the schedules tables.');
 							}
 
 							return interaction.editReply(`Something went wrong while adding the message into the schedule table. Error: ${error.name}: ${error.message}`);
@@ -336,6 +344,36 @@ module.exports = {
 				else {
 					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
 				}
+			}
+		}
+		else if (interaction.options.getSubcommand() === 'unpin') {
+			await interaction.deferReply({ ephemeral: true });
+
+			const serverName = interaction.options.getString('server-name');
+
+			const serverInfoMessage = await db.ServerInfoCron.findOne({ where: { servername: serverName } });
+
+			if (serverInfoMessage === null) {
+				await interaction.editReply(`No Message found for Server "${serverName}"!`);
+			}
+			else {
+				try {
+					const channel = await interaction.client.channels.fetch(serverInfoMessage.channelId);
+					const message = await channel.messages.fetch(serverInfoMessage.messageId);
+					message.unpin();
+
+					const serverInfoMessageCount = await db.ServerInfoCron.destroy({ where: { servername: serverName } });
+
+					if (!serverInfoMessageCount) {
+						await interaction.editReply(`No Message in database for server "${serverName}"!`);
+					}
+
+					await interaction.editReply(`Message for server "${serverName}" successfully unpinned and deleted from database!`);
+				}
+				catch (error) {
+					await interaction.editReply(`Unable to unpin message. Error: "${error}"!`);
+				}
+
 			}
 		}
 
