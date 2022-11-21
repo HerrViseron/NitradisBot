@@ -3,11 +3,11 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bot')
-		.setDescription('Some commands to control the Bot itself.')
+		.setDescription('Some commands to control the Bot itself. Start typing command for subcommands.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('ping')
-				.setDescription('Measures the roundtrip time a command takes.')
+				.setDescription('Measures the roundtrip time a command takes.'),
 		)
 		.addSubcommand(subcommand =>
 			subcommand

@@ -1,13 +1,11 @@
 const { SlashCommandBuilder, EmbedBuilder, channelLink, AutocompleteInteraction } = require('discord.js');
 const { request } = require('undici');
 const db = require('../database.js');
-const cron = require('node-cron');
-const messageUpdater = require('../messageUpdater');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('server')
-		.setDescription('Display information or control a Nitrado Gameserver.')
+		.setDescription('Control a Nitrado Gameserver or display information. Start typing command for subcommands.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('delete')
