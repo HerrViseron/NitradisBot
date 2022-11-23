@@ -55,7 +55,7 @@ module.exports = {
 				serverInfo.setTimestamp();
 				serverInfo.setFooter({ text: 'This Message will update every minute!' });
 
-				await message.edit({ embeds: [serverInfo] });
+				await message.edit({ content: '', embeds: [serverInfo] });
 
 				// Repin the massage if it became unpinned
 				if (await !message.pinned && await message.pinnable) {
