@@ -186,6 +186,13 @@ module.exports = {
 				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
 				const jsonResult = await infoResult.body.json();
 
+				// get Info about the active Games, for example to get the URL of the Icon
+				const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
+				const gamesJson = await gamesResult.body.json();
+				const { data: { games } } = gamesJson;
+				const [activeGame] = await games.filter(entry => entry.active === true);
+
+
 				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 
 				if (requestStatus === 'success') {
@@ -216,7 +223,7 @@ module.exports = {
 
 					serverInfo.setTitle(servername);
 					serverInfo.setDescription(`${statusIcon} ${game_human}`);
-					serverInfo.setThumbnail(`https://static.nitrado.net/cdn/gameicons/256/${game}.jpg`);
+					serverInfo.setThumbnail(activeGame.icons.x256);
 					serverInfo.addFields(
 						{ name: 'IP Address', value: `${ip}` },
 						{ name: 'Game Port', value: `${port}`, inline: true },
