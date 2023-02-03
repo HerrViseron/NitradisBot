@@ -21,7 +21,7 @@ module.exports = {
 
 		const query = new URLSearchParams({ is_nsfw });
 
-		const waifuResult = await request(`https://api.waifu.im/random/?${query}`);
+		const waifuResult = await request(`https://api.waifu.im/search/?${query}`);
 		const { images } = await waifuResult.body.json();
 
 		// await interaction.editReply({ files: [{ attachment: url, name: 'waifu.jpg' }] });
