@@ -21,6 +21,12 @@ module.exports = {
 			const gamesJson = await gamesResult.body.json();
 			const { data: { games } } = gamesJson;
 			const [activeGame] = await games.filter(entry => entry.active === true);
+			const installedGames = [];
+			for (const game of games) {
+				if (game.installed === true){
+					installedGames.push(game.name);
+				}
+			}
 
 			const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 
@@ -60,6 +66,20 @@ module.exports = {
 				);
 				serverInfo.setTimestamp();
 				serverInfo.setFooter({ text: 'This Message will update every minute!' });
+
+				try {
+					await db.Server.update({
+						installedGames: installedGames.join(', '),
+						activeGame: game_human
+					},{
+						where: {
+							id: serverData.id
+						}
+					});
+				}
+				catch (error) {
+					return interaction.editReply(`Something went wrong while updating the database entry. Error: ${error.name}: ${error.message}`);
+				}
 
 				await message.edit({ content: '', embeds: [serverInfo] });
 

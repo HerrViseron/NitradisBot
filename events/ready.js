@@ -11,8 +11,8 @@ module.exports = {
 		// initializing batabase
 		// Use db.Server.sync({ force: true }); for Dev Testing, resets Database on every App start
 		// in Prod use db.Server.sync();
-		await db.Server.sync();
-		await db.ServerInfoCron.sync();
+		await db.Server.sync({ alter: true });
+		await db.ServerInfoCron.sync({ alter: true });
 
 		// creating cron tasks to updates pinned server info messages every minute, will also repin the massage
 		cron.schedule('0 * * * * *', async () => {

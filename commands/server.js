@@ -191,7 +191,12 @@ module.exports = {
 				const gamesJson = await gamesResult.body.json();
 				const { data: { games } } = gamesJson;
 				const [activeGame] = await games.filter(entry => entry.active === true);
-
+				const installedGames = [];
+				for (const game of games) {
+					if (game.installed === true){
+						installedGames.push(game.name);
+					}
+				}
 
 				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 
@@ -228,8 +233,23 @@ module.exports = {
 						{ name: 'IP Address', value: `${ip}` },
 						{ name: 'Game Port', value: `${port}`, inline: true },
 						{ name: 'Query Port', value: `${query_port}`, inline: true },
+						{ name: 'Installed Games:', value: `${installedGames.join(', ')}` },
 					);
 					serverInfo.setTimestamp();
+
+					try {
+						await db.Server.update({
+							installedGames: installedGames.join(', '),
+							activeGame: game_human
+						},{
+							where: {
+								id: serverData.id
+							}
+						});
+					}
+					catch (error) {
+						return interaction.editReply(`Something went wrong while updating the database entry. Error: ${error.name}: ${error.message}`);
+					}
 
 					if (pinMessage) {
 						serverInfo.setFooter({ text: 'This Message will update every minute!' });

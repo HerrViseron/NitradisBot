@@ -47,6 +47,16 @@ const Server = sequelize.define('server', {
 		defaultValue: 'no-token',
 		allowNull: false,
 	},
+	installedGames: {
+		type: Sequelize.STRING(),
+		defaultValue: 'unkown',
+		allowNull: true,
+	},
+	activeGame: {
+		type: Sequelize.STRING(100),
+		defaultValue: 'unkown',
+		allowNull: true,
+	},
 });
 db.Server = Server;
 
