@@ -71,6 +71,7 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+.env.prod
 
 # config.json for the case that someone uses that for App config
 config.json
@@ -105,3 +106,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Visual Studio Code Configs
+.vscode/

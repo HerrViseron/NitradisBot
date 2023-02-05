@@ -106,6 +106,25 @@ module.exports = {
 		)
 		.addSubcommand(subcommand =>
 			subcommand
+				.setName('switch')
+				.setDescription('Switch active game on server.')
+				.addStringOption(option =>
+					option
+						.setName('server-name')
+						.setDescription('Server where the games shoud be switched.')
+						.setRequired(true)
+						.setAutocomplete(true),
+				)
+				.addStringOption(option =>
+					option
+						.setName('game')
+						.setDescription('Select which installed game should be the active game.')
+						.setRequired(true)
+						.setAutocomplete(true),
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
 				.setName('unpin')
 				.setDescription('Unpin a Server Info Message and remove od from autoupdate.')
 				.addStringOption(option =>
@@ -123,6 +142,18 @@ module.exports = {
 		if (focusedOption.name === 'server-name') {
 			const serverList = await db.Server.findAll({ attributes: ['displayname'] });
 			choices = serverList.map(s => s.displayname);
+		}
+		if (focusedOption.name === 'game') {
+			const serverName = await interaction.options.getString('server-name');
+			const gameList = await db.Server.findAll({
+				where: {
+					displayname: serverName
+				},
+				attributes: ['installedGames'] 
+			}); 
+			gamesString = gameList.map(s => s.installedGames).join('');
+			console.log(gameList);
+			choices = gamesString.split(', ');
 		}
 		const filtered = choices.filter(choice => choice.startsWith(focusedOption.value));
 		await interaction.respond(
@@ -191,7 +222,12 @@ module.exports = {
 				const gamesJson = await gamesResult.body.json();
 				const { data: { games } } = gamesJson;
 				const [activeGame] = await games.filter(entry => entry.active === true);
-
+				const installedGames = [];
+				for (const game of games) {
+					if (game.installed === true){
+						installedGames.push(game.name);
+					}
+				}
 
 				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 
@@ -219,6 +255,10 @@ module.exports = {
 						statusIcon = '🟡';
 						serverInfo.setColor(0xFFEA00);
 						break;
+					case 'gs_installation':
+						statusIcon = '🟣';
+						serverInfo.setColor(0x8D65C5);
+						break;
 					}
 
 					serverInfo.setTitle(servername);
@@ -228,8 +268,23 @@ module.exports = {
 						{ name: 'IP Address', value: `${ip}` },
 						{ name: 'Game Port', value: `${port}`, inline: true },
 						{ name: 'Query Port', value: `${query_port}`, inline: true },
+						{ name: 'Installed Games:', value: `${installedGames.join(', ')}` },
 					);
 					serverInfo.setTimestamp();
+
+					try {
+						await db.Server.update({
+							installedGames: installedGames.join(', '),
+							activeGame: game_human
+						},{
+							where: {
+								id: serverData.id
+							}
+						});
+					}
+					catch (error) {
+						return interaction.editReply(`Something went wrong while updating the database entry. Error: ${error.name}: ${error.message}`);
+					}
 
 					if (pinMessage) {
 						serverInfo.setFooter({ text: 'This Message will update every minute!' });
@@ -348,6 +403,50 @@ module.exports = {
 				}
 				else {
 					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
+				}
+			}
+		}
+		else if (interaction.options.getSubcommand() === 'switch') {
+			await interaction.deferReply();
+
+			const serverName = interaction.options.getString('server-name');
+			const serverGame = interaction.options.getString('game');
+/*** TO DO */
+			const serverData = await db.Server.findOne({ where: { displayname: serverName } });
+
+			if (serverData === null) {
+				await interaction.editReply(`Server "${serverName}" not found in database!`);
+			}
+			else if (serverGame === null) {
+				await interaction.editReply(`You need to specify a game!`);
+			}
+			else {
+				const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
+				const gamesJson = await gamesResult.body.json();
+
+				const { 'status': gamesRequestStatus, 'message': gamesRequestStatus_message } = gamesJson; 
+
+				if (gamesRequestStatus === 'success') {
+					const { data: { games } } = gamesJson;
+					const [selectedGame] = await games.filter(entry => entry.name === serverGame);
+
+					const game = selectedGame.folder_short;
+					const query = new URLSearchParams({ game });
+					const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games/start?${query}`, { headers: { authorization: serverData.nitradotoken }, method: 'POST' });
+					const jsonResult = await infoResult.body.json();
+
+					const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult; 
+
+					if (requestStatus === 'success') {
+						await interaction.editReply(`The game of "${serverName}" will now switch to "${serverGame}".`);
+					}
+					else {
+						await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
+					}
+					
+				}
+				else {
+					await interaction.editReply(`There was an error while contacting the NitrAPI: ${gamesRequestStatus_message}`);
 				}
 			}
 		}
