@@ -54,6 +54,10 @@ module.exports = {
 					statusIcon = '🟠';
 					serverInfo.setColor(0xFFEA00);
 					break;
+				case 'gs_installation':
+					statusIcon = '🟣';
+					serverInfo.setColor(0x8D65C5);
+					break;
 				}
 
 				serverInfo.setTitle(servername);
@@ -63,6 +67,7 @@ module.exports = {
 					{ name: 'IP Address', value: `${ip}` },
 					{ name: 'Game Port', value: `${port}`, inline: true },
 					{ name: 'Query Port', value: `${query_port}`, inline: true },
+					{ name: 'Installed Games:', value: `${installedGames.join(', ')}` },
 				);
 				serverInfo.setTimestamp();
 				serverInfo.setFooter({ text: 'This Message will update every minute!' });
