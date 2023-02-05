@@ -144,13 +144,15 @@ module.exports = {
 			choices = serverList.map(s => s.displayname);
 		}
 		if (focusedOption.name === 'game') {
-			const serverName = interaction.options.getString('server-name');
-			const gameList = await db.Server.findAll({ 
+			const serverName = await interaction.options.getString('server-name');
+			const gameList = await db.Server.findAll({
+				where: {
+					displayname: serverName
+				},
 				attributes: ['installedGames'] 
-			}, { 
-				where: { displayname: serverName} 
-			});
+			}); 
 			gamesString = gameList.map(s => s.installedGames).join('');
+			console.log(gameList);
 			choices = gamesString.split(', ');
 		}
 		const filtered = choices.filter(choice => choice.startsWith(focusedOption.value));
