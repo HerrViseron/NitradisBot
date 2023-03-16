@@ -217,9 +217,20 @@ module.exports = {
 				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
 				const jsonResult = await infoResult.body.json();
 
+				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
+				if (requestStatus !== 'success') {
+					return interaction.editReply(`Something went wrong while getting server information from NitrAPI. Error: ${gamrequestStatusesStatus}: ${requestStatus_message}`);
+				}
+
 				// get Info about the active Games, for example to get the URL of the Icon
 				const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
 				const gamesJson = await gamesResult.body.json();
+
+				const { 'status': gamesStatus, 'message': gamesStatus_message } = gamesJson;
+				if (gamesStatus !== 'success') {
+					return interaction.editReply(`Something went wrong while getting istalled Games from NitrAPI. Error: ${gamesStatus}: ${gamesStatus_message}`);
+				}
+
 				const { data: { games } } = gamesJson;
 				const [activeGame] = await games.filter(entry => entry.active === true);
 				const installedGames = [];
@@ -229,94 +240,87 @@ module.exports = {
 					}
 				}
 
-				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
+				const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
+				const servername = name ?? game_human;
 
-				if (requestStatus === 'success') {
-					const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
-					const servername = name ?? game_human;
+				const serverInfo = new EmbedBuilder();
+				serverInfo.setColor(0xA8A8A8);
+				let statusIcon = '⚪';
+				switch (status) {
+				case 'started':
+					statusIcon = '🟢';
+					serverInfo.setColor(0x00B000);
+					break;
+				case 'stopped':
+					statusIcon = '🔴';
+					serverInfo.setColor(0xF00000);
+					break;
+				case 'restarting':
+					statusIcon = '🟡';
+					serverInfo.setColor(0xFFEA00);
+					break;
+				case 'stopping':
+					statusIcon = '🟡';
+					serverInfo.setColor(0xFFEA00);
+					break;
+				case 'gs_installation':
+					statusIcon = '🟣';
+					serverInfo.setColor(0x8D65C5);
+					break;
+				}
 
-					const serverInfo = new EmbedBuilder();
-					serverInfo.setColor(0xA8A8A8);
-					let statusIcon = '⚪';
-					switch (status) {
-					case 'started':
-						statusIcon = '🟢';
-						serverInfo.setColor(0x00B000);
-						break;
-					case 'stopped':
-						statusIcon = '🔴';
-						serverInfo.setColor(0xF00000);
-						break;
-					case 'restarting':
-						statusIcon = '🟡';
-						serverInfo.setColor(0xFFEA00);
-						break;
-					case 'stopping':
-						statusIcon = '🟡';
-						serverInfo.setColor(0xFFEA00);
-						break;
-					case 'gs_installation':
-						statusIcon = '🟣';
-						serverInfo.setColor(0x8D65C5);
-						break;
-					}
+				serverInfo.setTitle(servername);
+				serverInfo.setDescription(`${statusIcon} ${game_human}`);
+				serverInfo.setThumbnail(activeGame.icons.x256);
+				serverInfo.addFields(
+					{ name: 'IP Address', value: `${ip}` },
+					{ name: 'Game Port', value: `${port}`, inline: true },
+					{ name: 'Query Port', value: `${query_port}`, inline: true },
+					{ name: 'Installed Games:', value: `${installedGames.join(', ')}` },
+				);
+				serverInfo.setTimestamp();
 
-					serverInfo.setTitle(servername);
-					serverInfo.setDescription(`${statusIcon} ${game_human}`);
-					serverInfo.setThumbnail(activeGame.icons.x256);
-					serverInfo.addFields(
-						{ name: 'IP Address', value: `${ip}` },
-						{ name: 'Game Port', value: `${port}`, inline: true },
-						{ name: 'Query Port', value: `${query_port}`, inline: true },
-						{ name: 'Installed Games:', value: `${installedGames.join(', ')}` },
-					);
-					serverInfo.setTimestamp();
+				try {
+					await db.Server.update({
+						installedGames: installedGames.join(', '),
+						activeGame: game_human
+					},{
+						where: {
+							id: serverData.id
+						}
+					});
+				}
+				catch (error) {
+					return interaction.editReply(`Something went wrong while updating the database entry. Error: ${error.name}: ${error.message}`);
+				}
+
+				if (pinMessage) {
+					serverInfo.setFooter({ text: 'This Message will update every minute!' });
+				}
+				const message = await interaction.editReply({ embeds: [serverInfo] });
+
+				if (pinMessage) {
 
 					try {
-						await db.Server.update({
-							installedGames: installedGames.join(', '),
-							activeGame: game_human
-						},{
-							where: {
-								id: serverData.id
-							}
+
+						await db.ServerInfoCron.create({
+							messageId: message.id,
+							channelId: interaction.channelId,
+							servername: serverName,
 						});
+
+						await message.pin();
+
 					}
 					catch (error) {
-						return interaction.editReply(`Something went wrong while updating the database entry. Error: ${error.name}: ${error.message}`);
-					}
-
-					if (pinMessage) {
-						serverInfo.setFooter({ text: 'This Message will update every minute!' });
-					}
-					const message = await interaction.editReply({ embeds: [serverInfo] });
-
-					if (pinMessage) {
-
-						try {
-
-							await db.ServerInfoCron.create({
-								messageId: message.id,
-								channelId: interaction.channelId,
-								servername: serverName,
-							});
-
-							await message.pin();
-
+						if (error.name === 'SequelizeUniqueConstraintError') {
+							return interaction.editReply('That Server or Message is already in the schedules tables.');
 						}
-						catch (error) {
-							if (error.name === 'SequelizeUniqueConstraintError') {
-								return interaction.editReply('That Server or Message is already in the schedules tables.');
-							}
 
-							return interaction.editReply(`Something went wrong while adding the message into the schedule table. Error: ${error.name}: ${error.message}`);
-						}
+						return interaction.editReply(`Something went wrong while adding the message into the schedule table. Error: ${error.name}: ${error.message}`);
 					}
+				}
 
-				}
-				else {
-					await interaction.editReply(`There was an error while contacting the NitrAPI: ${requestStatus_message}`);
-				}
 			}
 
 		}
