@@ -13,8 +13,21 @@ module.exports = {
 			await message.edit('Error updating message: Server was not found in Database!');
 		}
 		else {
+			// Try Catch the API Response for the initial Server Info
+			try {
 			const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
-			const jsonResult = await infoResult.body.json();
+			}
+			catch (error) {
+				return interaction.editReply(`Something went wrong during the API request for infoResult. Error: ${error.name}: ${error.message}`);
+			}
+			// Try Catch the JSON Parse for the initial Server Info
+			try {
+				const jsonResult = await infoResult.body.json();
+			}
+			catch (error) {
+				return interaction.editReply(`Something went wrong during the JSON parsing of the API response for jsonResult. Error: ${error.name}: ${error.message}`);
+			}
+
 
 			const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 			if (requestStatus !== 'success') {
@@ -22,8 +35,20 @@ module.exports = {
 			}
 
 			// get Info about the active Games, for example to get the URL of the Icon
-			const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
-			const gamesJson = await gamesResult.body.json();
+			// Try Catch the API Response for the Server Games List
+			try {
+				const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
+			}
+			catch (error) {
+				return interaction.editReply(`Something went wrong during the API request for gamesResult. Error: ${error.name}: ${error.message}`);
+			}
+			// Try Catch the JSON Parse for the Server Games List
+			try {
+				const gamesJson = await gamesResult.body.json();
+			}
+			catch (error) {
+				return interaction.editReply(`Something went wrong during the JSON parsing of the API response for gamesJson. Error: ${error.name}: ${error.message}`);
+			}
 			
 			const { 'status': gamesStatus, 'message': gamesStatus_message } = gamesJson;
 			if (gamesStatus !== 'success') {
