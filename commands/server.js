@@ -215,21 +215,10 @@ module.exports = {
 			}
 			else {
 				// Try Catch the API Response for the initial Server Info
-				try {
-					const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
-				}
-				catch (error) {
-					return interaction.editReply(`Something went wrong during the API request for infoResult. Error: ${error.name}: ${error.message}`);
-				}
+				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
 				// Try Catch the JSON Parse for the initial Server Info
-				try {
-					const jsonResult = await infoResult.body.json();
-				}
-				catch (error) {
-					return interaction.editReply(`Something went wrong during the JSON parsing of the API response for jsonResult. Error: ${error.name}: ${error.message}`);
-				}
-
-
+				const jsonResult = await infoResult.body.json();
+				
 				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 				if (requestStatus !== 'success') {
 					return interaction.editReply(`Something went wrong while getting server information from NitrAPI. Error: ${gamrequestStatusesStatus}: ${requestStatus_message}`);
@@ -237,19 +226,9 @@ module.exports = {
 
 				// get Info about the active Games, for example to get the URL of the Icon
 				// Try Catch the API Response for the Server Games List
-				try {
-					const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
-				}
-				catch (error) {
-					return interaction.editReply(`Something went wrong during the API request for gamesResult. Error: ${error.name}: ${error.message}`);
-				}
+				const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
 				// Try Catch the JSON Parse for the Server Games List
-				try {
-					const gamesJson = await gamesResult.body.json();
-				}
-				catch (error) {
-					return interaction.editReply(`Something went wrong during the JSON parsing of the API response for gamesJson. Error: ${error.name}: ${error.message}`);
-				}
+				const gamesJson = await gamesResult.body.json();
 
 				const { 'status': gamesStatus, 'message': gamesStatus_message } = gamesJson;
 				if (gamesStatus !== 'success') {
