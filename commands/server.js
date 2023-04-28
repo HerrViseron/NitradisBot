@@ -214,16 +214,20 @@ module.exports = {
 				await interaction.editReply(`Server "${serverName}" not found in database!`);
 			}
 			else {
+				// Try Catch the API Response for the initial Server Info
 				const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
+				// Try Catch the JSON Parse for the initial Server Info
 				const jsonResult = await infoResult.body.json();
-
+				
 				const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
 				if (requestStatus !== 'success') {
 					return interaction.editReply(`Something went wrong while getting server information from NitrAPI. Error: ${gamrequestStatusesStatus}: ${requestStatus_message}`);
 				}
 
 				// get Info about the active Games, for example to get the URL of the Icon
+				// Try Catch the API Response for the Server Games List
 				const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
+				// Try Catch the JSON Parse for the Server Games List
 				const gamesJson = await gamesResult.body.json();
 
 				const { 'status': gamesStatus, 'message': gamesStatus_message } = gamesJson;

@@ -13,7 +13,9 @@ module.exports = {
 			await message.edit('Error updating message: Server was not found in Database!');
 		}
 		else {
+			// Try Catch the API Response for the initial Server Info
 			const infoResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers`, { headers: { authorization: serverData.nitradotoken } });
+			// Try Catch the JSON Parse for the initial Server Info
 			const jsonResult = await infoResult.body.json();
 
 			const { 'status': requestStatus, 'message': requestStatus_message } = jsonResult;
@@ -22,7 +24,9 @@ module.exports = {
 			}
 
 			// get Info about the active Games, for example to get the URL of the Icon
+			// Try Catch the API Response for the Server Games List
 			const gamesResult = await request(`https://api.nitrado.net/services/${serverData.id}/gameservers/games`, { headers: { authorization: serverData.nitradotoken } });
+			// Try Catch the JSON Parse for the Server Games List
 			const gamesJson = await gamesResult.body.json();
 			
 			const { 'status': gamesStatus, 'message': gamesStatus_message } = gamesJson;
