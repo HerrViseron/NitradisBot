@@ -244,8 +244,9 @@ module.exports = {
 					}
 				}
 
-				const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
-				const servername = name ?? game_human;
+				//const { data: { gameserver: { status, ip, port, query_port, game, game_human, settings: { config: { 'server-name': name } } } } } = jsonResult;
+				//const servername = name ?? game_human;
+				const { data: { gameserver: { status, ip, port, query_port, game, game_human } } } = jsonResult;
 
 				const serverInfo = new EmbedBuilder();
 				serverInfo.setColor(0xA8A8A8);
@@ -273,7 +274,7 @@ module.exports = {
 					break;
 				}
 
-				serverInfo.setTitle(servername);
+				serverInfo.setTitle(serverName);
 				serverInfo.setDescription(`${statusIcon} ${game_human}`);
 				serverInfo.setThumbnail(activeGame.icons.x256);
 				serverInfo.addFields(
