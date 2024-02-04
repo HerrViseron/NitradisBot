@@ -3,7 +3,7 @@ FROM node:lts-slim
 LABEL org.opencontainers.image.authors="kontakt@viseron.de"
 
 RUN apt-get update && \
-	apt-get install -y ps && \
+	apt-get install -y procps && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV production
