@@ -77,7 +77,7 @@ module.exports = {
 			serverInfo.setDescription(`${statusIcon} ${game_human}`);
 			serverInfo.setThumbnail(activeGame.icons.x256);
 			serverInfo.addFields(
-				{ name: 'IP Address', value: `${ip}` },
+				{ name: 'IP Address', value: `${ip}`, inline: true },
 				{ name: 'Game Port', value: `${port}`, inline: true },
 				{ name: 'Query Port', value: `${query_port}`, inline: true },
 			);
@@ -87,9 +87,8 @@ module.exports = {
 			if(games_with_query.includes(game)) {
 				const { data: { gameserver: { query } } } = jsonResult;
 				serverInfo.addFields(
-					{ name: '\u200B', value: '\u200B' },
-					{name: 'Server Name:', value: `${query.server_name}`,  inline: true },
-					{name: 'Players Online:', value: `${query.player_current}`, inline: true },
+					{ name: 'Server Name:', value: `${query.server_name}`,  inline: true },
+					{ name: 'Players Online:', value: `${query.player_current}`, inline: true },
 				);
 			}
 
