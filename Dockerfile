@@ -2,6 +2,10 @@ FROM node:lts-slim
 
 LABEL org.opencontainers.image.authors="kontakt@viseron.de"
 
+RUN apt-get update && \
+	apt-get install -y procps && \
+	rm -rf /var/lib/apt/lists/*
+
 ENV NODE_ENV production
 
 WORKDIR /usr/src/nitradisbot
@@ -18,4 +22,4 @@ USER node
 
 VOLUME /var/lib/nitradisbot/
 
-CMD ["pm2-runtime", "index.js"]
+CMD ["node", "nitradisbot.js"]
