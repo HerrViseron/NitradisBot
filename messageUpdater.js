@@ -87,7 +87,8 @@ module.exports = {
 			if(games_with_query.includes(game)) {
 				const { data: { gameserver: { query } } } = jsonResult;
 				serverInfo.addFields(
-					{name: 'Server Name:', value: `${query.server_name}` },
+					{ name: '\u200B', value: '\u200B' },
+					{name: 'Server Name:', value: `${query.server_name}`,  inline: true },
 					{name: 'Players Online:', value: `${query.player_current}`, inline: true },
 				);
 			}
