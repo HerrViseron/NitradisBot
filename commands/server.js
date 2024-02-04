@@ -286,8 +286,8 @@ module.exports = {
 				//Some Server specific query information, only for selected games!
 				const games_with_query = ["valheim"]
 				if(games_with_query.includes(game)) {
-					const { data: { gameserver: { game_specific:{ query } } } } = jsonResult;
-					console.log(jsonResult)
+					const { data: { gameserver: { query } } } = jsonResult;
+					console.log(query)
 					serverInfo.addFields(
 						{name: 'Server Name:', value: `${query.server_name}`, inline: true },
 						{name: 'Players Online:', value: `${query.player_current}`, inline: true },
