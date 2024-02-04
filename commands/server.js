@@ -281,6 +281,21 @@ module.exports = {
 					{ name: 'IP Address', value: `${ip}` },
 					{ name: 'Game Port', value: `${port}`, inline: true },
 					{ name: 'Query Port', value: `${query_port}`, inline: true },
+				);
+				
+				//Some Server specific query information, only for selected games!
+				const games_with_query = ["valheim"]
+				if(games_with_query.includes(game)) {
+					const { data: { gameserver: { game_specific:{ query } } } } = jsonResult;
+
+					serverInfo.addFields(
+						{name: 'Server Name:', value: `${query.server_name}`, inline: true },
+						{name: 'Players Online:', value: `${query.player_current}`, inline: true },
+					);
+
+				}
+
+				serverInfo.addFields(
 					{ name: 'Installed Games:', value: `${installedGames.join(', ')}` },
 				);
 				serverInfo.setTimestamp();
