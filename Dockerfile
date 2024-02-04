@@ -22,4 +22,5 @@ USER node
 
 VOLUME /var/lib/nitradisbot/
 
-CMD ["pm2-runtime", "index.js"]
+#CMD ["pm2-runtime", "index.js"]
+CMD ["node", "index.js"]
