@@ -82,9 +82,9 @@ module.exports = {
 				{ name: 'Query Port', value: `${query_port}`, inline: true },
 			);
 
-			//Some Server specific query information, only for selected games!
+			//Some Server specific query information, only for selected games! And only if Server is running
 			const games_with_query = ["valheim"]
-			if(games_with_query.includes(game)) {
+			if(games_with_query.includes(game) && status === 'started') {
 				const { data: { gameserver: { query } } } = jsonResult;
 				serverInfo.addFields(
 					{ name: 'Server Name:', value: `${query.server_name}`,  inline: true },
