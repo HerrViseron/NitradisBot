@@ -20,6 +20,6 @@ const fieldMapping = {
     'Wei': { jsonPath: 'system.abilities.wis.value', type: 'string' },
     'WeiProf': { jsonPath: 'system.abilities.wis.proficient', type: 'checkbox' },
     'Cha': { jsonPath: 'system.abilities.cha.value', type: 'string' },
-    'ChaProf': { jsonPath: 'system.abilities.cha.proficient', type: 'checkbox' },
+    'ChaProf': { jsonPath: 'system.abilities.cha.proficient', type: 'checkbox' }
 };
 module.exports = { fieldMapping };
