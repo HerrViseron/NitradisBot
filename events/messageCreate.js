@@ -38,14 +38,14 @@ module.exports = {
 
                 if (attachmentJSON._stats.systemId != 'dnd5e' || attachmentJSON.type != 'character') {
                     await message.delete()
-                        .then(message.channel.send(`<@${message.author.id}>, dein Upload scheint leider keine DnD5e Charakter zu enthalten`))
+                        .then(message.channel.send(`<@${message.author.id}>, dein Upload scheint leider keine DnD5e Character zu enthalten`))
                         .then(msg => console.log(`Deleted message from ${msg.author.username}, no Character Data or Wrong Foundry System`))
                         .catch(console.error);
                     return;
                 }
 
                 // Reply to User and start working on the File
-                await message.reply(`Danke für das Hochladen deines Charakters "${bold(attachmentJSON.name)}"\nIch kümmere mich jetzt um das Erstellen des Charakter Sheets, bitte hab etwas Geduld. Ich antworte Dir, wenn ich fertig bin.`);    
+                await message.reply(`Danke für das Hochladen deines Characters "${bold(attachmentJSON.name)}"\nIch kümmere mich jetzt um das Erstellen des Character Sheets, bitte hab etwas Geduld. Ich antworte Dir, wenn ich fertig bin.`);    
 
                 // The Attachment will be handed over to the Sheet Generator Funktion, the rest is handled over there
                 await genDnDCharSheet(attachmentJSON, message.author, message.channel);

@@ -106,7 +106,7 @@ async function genDnDCharSheet(character, author, channel) {
     //send the saved File to the User
     const attachment = new AttachmentBuilder(pdfOutputPath, { name: pdfOutputName, description: `Character Sheet für ${character.name}` });
     await channel.send({
-        content: `<@${author.id}>, Hier ist dein Charakter Sheet für "${bold(character.name)}"`,
+        content: `<@${author.id}>, Hier ist dein Character Sheet für "${bold(character.name)}"`,
         files: [attachment]
     });
 
