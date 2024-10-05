@@ -1,7 +1,6 @@
 const fieldMapping = {
     'Charaktername_page1': { jsonPath: 'name', type: 'string' },
     'Charaktername_page2': { jsonPath: 'name', type: 'string' },
-    "name": "Charaktername_page2",
     // Money Money Money
     'PM': { jsonPath: 'system.abilities.pp.value', type: 'string' },
     'GM': { jsonPath: 'system.abilities.gp.value', type: 'string' },
@@ -20,6 +19,6 @@ const fieldMapping = {
     'Wei': { jsonPath: 'system.abilities.wis.value', type: 'string' },
     'WeiProf': { jsonPath: 'system.abilities.wis.proficient', type: 'checkbox' },
     'Cha': { jsonPath: 'system.abilities.cha.value', type: 'string' },
-    'ChaProf': { jsonPath: 'system.abilities.cha.proficient', type: 'checkbox' }
+    'ChaProf': { jsonPath: 'system.abilities.cha.proficient', type: 'checkbox' },
 };
 module.exports = { fieldMapping };
