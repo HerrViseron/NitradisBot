@@ -1,8 +1,7 @@
 const { Events } = require('discord.js');
 const path = require('node:path');
-const { baseDir } = require('../nitradisbot');
 
-const { genDnDCharSheet } = require(path.join(baseDir, 'functions/dnd-sheet-gen'))
+const { genDnDCharSheet } = require('../functions/dndSheetGen')
 
 const CHANNEL_ID_DND_SHEET_GEN = '1292056999957237802'; // Channel ID in der auf DnD Sheet Dateien reagiert werden soll
 const ALLOWED_MIME_TYPES_DND_SHEET_GEN = ['application/json']; // Allowed MIME-Types for DnD-Sheet-Gen
