@@ -22,7 +22,7 @@ module.exports = {
                 // Beispiel: Du kannst die Datei herunterladen oder weiterverarbeiten
                 // Dafür brauchst du ggf. Bibliotheken wie `node-fetch` oder `axios`, um die Datei herunterzuladen
         
-                message.channel.reply(`Danke für das Hochladen der Datei: ${attachment.name}`);
+                message.reply(`Danke für das Hochladen der Datei: ${attachment.name}`);
                 //message.channel.send(`Danke für das Hochladen der Datei: ${attachment.name}`);
             });
         }
