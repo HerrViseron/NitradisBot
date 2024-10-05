@@ -1,4 +1,9 @@
 const { Events } = require('discord.js');
+const path = require('node:path');
+const { baseDir } = require('../index');
+
+baseDir = path.resolve(__dirname, './')
+const { genDnDCharSheet } = require(path.join(baseDir, 'functions/dnd-sheet-gen'))
 
 const CHANNEL_ID_DND_SHEET_GEN = '1292056999957237802'; // Channel ID in der auf DnD Sheet Dateien reagiert werden soll
 const ALLOWED_MIME_TYPES_DND_SHEET_GEN = ['application/json']; // Allowed MIME-Types for DnD-Sheet-Gen
@@ -28,11 +33,12 @@ module.exports = {
             }
 
             // Reply to User and start working on the File
-            message.reply(`Danke für das Hochladen der Datei: ${attachment.name}\nIch kümmere mich jetzt um das Erstellen des Character Sheets, bitte hab etwas Gedult. Ich antworte Dir, wenn ich fertig bin.`);
+            message.reply(`Danke für das Hochladen der Datei: ${attachment.name}\nIch kümmere mich jetzt um das Erstellen des Character Sheets, bitte hab etwas Geduld. Ich antworte Dir, wenn ich fertig bin.`);
             // Log the URL to the Uploaded File
             console.log(`File uploaded: ${attachment.url}`);
     
             // The Attachment will be handed over to the Sheet Generator Funktion, the rest is handled over there
+            genDnDCharSheet(attachment, message.author.username, message.channel);
 
         });
 

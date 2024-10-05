@@ -5,6 +5,9 @@ dotenv.config();
 const fs = require('node:fs');
 const path = require('node:path');
 
+const baseDir = path.resolve(__dirname, './');
+module.exports = { baseDir };
+
 // Require the necessary discord.js classes
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 // const internal = require('node:stream');
