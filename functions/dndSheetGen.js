@@ -36,6 +36,7 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
 }
 
 async function genDnDCharSheet(character, author, channel) {
+    console.log("Current directory:", __dirname);
     const pdfTemplatePath = "../ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
     const pdfOutputDir = "/tmp/"
     const currentDate = new Date();
