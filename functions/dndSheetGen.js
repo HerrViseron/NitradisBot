@@ -8,6 +8,36 @@ function getNestedValue(obj, keyPath) {
     return keyPath.split('.').reduce((acc, key) => acc && acc[key], obj);
 }
 
+function getValueFromJsonByPath(jsonData, path) {
+    return path.split('.').reduce((prev, curr) => prev ? prev[curr] : undefined, jsonData);
+}
+
+function convertJsonToPdfData(jsonData, pdfFieldMapping) {
+    const pdfData = {};
+
+    for (let field in pdfFieldMapping) {
+        const { jsonPath, type } = pdfFieldMapping[field];
+        let value = getValueFromJsonByPath(jsonData, jsonPath);
+
+        // Konvertiere den Wert basierend auf dem Typ
+        switch (type) {
+            case 'string':
+                pdfData[field] = value ? value.toString() : ''; // Convert to String
+                break;
+            case 'number':
+                pdfData[field] = typeof value === 'number' ? value : '0'; // Zahlen in String für PDF-Felder
+                break;
+            case 'checkbox':
+                pdfData[field] = value === 1 || value === true ? true : false; // Checkboxes in PDF are weird...
+                break;
+            default:
+                pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
+        }
+    }
+
+    return pdfData;
+}
+
 // Funktion zum Laden des PDF-Formulars und der JSON-Daten
 async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, fieldMapping) {
     // Load PDF Template
@@ -18,16 +48,40 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
   
     // Get the PDF Form
     const form = pdfDoc.getForm();
-  
+
+    //generate Objekt with PDF Form Data from FieldMapping and JSON Data
+    const pdfFormData = convertJsonToPdfData(jsonData, fieldMapping)
+
     // Fill the formfield based on the JSON and Mapping Data
-    Object.keys(fieldMapping).forEach(jsonKey => {
-        const pdfFieldName = fieldMapping[jsonKey]; // Get the corresponding PDF Fieldname
-        const field = form.getField(pdfFieldName);  // Access the field in the PDF
-        const value = getNestedValue(jsonData, jsonKey); // get the Mapping with nested JSON Objects
-        if (field && value !== undefined) {
-            field.setText(value); // Set the field Content
+    for (const fieldName in pdfFormData) {
+        const fieldValue = pdfFormData[fieldName];
+
+        // Try to find the Field in the PDF Form
+        const field = form.getFieldMaybe(fieldName);
+
+        if (!field) {
+            console.warn(`Field "${fieldName}" was not found in PDF-File.`);
+            continue; // Ignore and move to the next
         }
-    });
+
+        // Check Type of field and set Value appropriately
+        if (field.constructor.name === 'PDFTextField') {
+            // Set Textfield
+            field.setText(fieldValue);
+        } else if (field.constructor.name === 'PDFCheckBox') {
+            // set Checkbox (true oder false)
+            if (fieldValue === true) {
+                field.check();
+            } else {
+                field.uncheck();
+            }
+        } else if (field.constructor.name === 'PDFRadioGroup') {
+            // Radio-Gruppe (falls vorhanden)
+            field.select(fieldValue);
+        } else {
+            console.log(`The field type "${field.constructor.name}" is not supported!`);
+        }
+    }
   
     // Save the PDF file
     const pdfBytes = await pdfDoc.save();
