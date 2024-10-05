@@ -37,13 +37,13 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
 
 async function genDnDCharSheet(character, author, channel) {
     console.log("Current directory:", __dirname);
-    const pdfTemplatePath = "../ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
+    const pdfTemplatePath = "/usr/src/nitradisbot/ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
     const pdfOutputDir = "/tmp/"
     const currentDate = new Date();
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth}${currentDate.getDay}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`
-    const fieldMappingFile = '../ressources/dnd/DnDCharSheet_fieldMapping_DE.js'
+    const fieldMappingFile = '/usr/src/nitradisbot/ressources/dnd/DnDCharSheet_fieldMapping_DE.js'
 
     //Start the PDF File Mapping and Filling
     await fillPdfFormWithMapping(character, pdfTemplatePath, pdfOutputPath, fieldMappingFile);
