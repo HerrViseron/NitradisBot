@@ -24,7 +24,7 @@ module.exports = {
         message.attachments.forEach(attachment => {
             
             if (!ALLOWED_MIME_TYPES_DND_SHEET_GEN.includes(attachment.contentType)) {
-                console.log(`No allowed MIME-Type`);
+                console.log(`No allowed MIME-Type, uploaded: ${attachment.contentType}`);
                 return;
             }
 
