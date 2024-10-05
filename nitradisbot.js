@@ -14,9 +14,15 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 // Require section END
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ 
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages, 
+		GatewayIntentBits.MessageContent
+	] 
+});
 
-// Loading all files fo Events to listen for
+// Loading all files for Events to listen for
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
