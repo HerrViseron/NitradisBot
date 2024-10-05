@@ -21,20 +21,19 @@ module.exports = {
             if (!ALLOWED_MIME_TYPES_DND_SHEET_GEN.includes(mimeType)) {
                 console.log(`No allowed MIME-Type, uploaded: ${attachment.contentType}`);
                 message.delete()
-                    .then(message.channel.send(`<@${message.author.id}>, dein Upload hat leider nicht das richtige Datei Format.`))
+                    .then(message.channel.send(`<@${message.author.id}>, dein Upload hat leider nicht das richtige Dateiformat.`))
                     .then(msg => console.log(`Deleted message from ${msg.author.username}`))
                     .catch(console.error);
                 return;
             }
 
-            // Hier kannst du den Link zur Datei verwenden
+            // Reply to User and start working on the File
+            message.reply(`Danke für das Hochladen der Datei: ${attachment.name}\nIch kümmere mich jetzt um das Erstellen des Character Sheets, bitte hab etwas Gedult. Ich antworte Dir, wenn ich fertig bin.`);
+            // Log the URL to the Uploaded File
             console.log(`File uploaded: ${attachment.url}`);
     
-            // Beispiel: Du kannst die Datei herunterladen oder weiterverarbeiten
-            // Dafür brauchst du ggf. Bibliotheken wie `node-fetch` oder `axios`, um die Datei herunterzuladen
-    
-            message.reply(`Danke für das Hochladen der Datei: ${attachment.name}`);
-            //message.channel.send(`Danke für das Hochladen der Datei: ${attachment.name}`);
+            // The Attachment will be handed over to the Sheet Generator Funktion, the rest is handled over there
+
         });
 
     /* ### DnD-Sheet-Gen ENDE ### */
