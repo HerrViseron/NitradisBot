@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const path = require('node:path');
+const fetch = require('node-fetch');
 
 const { genDnDCharSheet } = require('../functions/dndSheetGen')
 
