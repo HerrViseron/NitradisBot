@@ -93,11 +93,12 @@ async function genDnDCharSheet(character, author, channel) {
     console.log("Current directory:", __dirname);
     const pdfTemplatePath = "/usr/src/nitradisbot/ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
     const pdfOutputDir = "/tmp/"
-    const currentDate = new Date();
+    const DateTZString = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+    const currentDate = new Date(DateTZ);
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()}${currentDate.getDay()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
-    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`
-    const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`
-    const charSheetField = require('../ressources/dnd/DnDCharSheet_fieldMapping_DE')
+    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`;
+    const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`;
+    const charSheetField = require('../ressources/dnd/DnDCharSheet_fieldMapping_DE');
 
     //Start the PDF File Mapping and Filling
     await fillPdfFormWithMapping(character, pdfTemplatePath, pdfOutputPath, charSheetField.fieldMapping);
@@ -109,7 +110,7 @@ async function genDnDCharSheet(character, author, channel) {
             name: pdfOutputName,
             description: `Character Sheet für ${character.name}`
         }]
-    })
+    });
 
     //clean up PDF File from local storage
     fs.unlinkSync(pdfOutputPath);
