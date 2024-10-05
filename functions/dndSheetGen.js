@@ -43,10 +43,10 @@ async function genDnDCharSheet(character, author, channel) {
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth}${currentDate.getDay}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`
-    const fieldMappingFile = '/usr/src/nitradisbot/ressources/dnd/DnDCharSheet_fieldMapping_DE.js'
+    const charSheetField = require('../ressources/dnd/DnDCharSheet_fieldMapping_DE')
 
     //Start the PDF File Mapping and Filling
-    await fillPdfFormWithMapping(character, pdfTemplatePath, pdfOutputPath, fieldMappingFile);
+    await fillPdfFormWithMapping(character, pdfTemplatePath, pdfOutputPath, charSheetField.fieldMapping);
 
     //send the saved File to the User
     await channel.send(`<@${author.id}>, Hier ist dein Charakter Sheet für "${bold(character.name)}"`, {

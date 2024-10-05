@@ -20,4 +20,5 @@ const fieldMapping = {
     "system.abilities.wis.proficient": "WeiProf",
     "system.abilities.cha.value": "Cha",
     "system.abilities.cha.proficient": "ChaProf",
-  };
+};
+module.exports(fieldMapping);
