@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const path = require('node:path');
-const { baseDir } = require('../index');
+const { baseDir } = require('../nitradisbot');
 
 baseDir = path.resolve(__dirname, './')
 const { genDnDCharSheet } = require(path.join(baseDir, 'functions/dnd-sheet-gen'))
