@@ -15,7 +15,7 @@ module.exports = {
         // Überprüfe, ob die Nachricht Anhänge enthält
         if (message.attachments.size > 0) {
             // Hole die Datei-Anhänge aus der Nachricht
-            message.attachments.forEach(attachment => {
+            await message.attachments.forEach(attachment => {
                 // Hier kannst du den Link zur Datei verwenden
                 console.log(`Datei hochgeladen: ${attachment.url}`);
         
@@ -25,9 +25,9 @@ module.exports = {
                 message.channel.send(`Danke für das Hochladen der Datei: ${attachment.name}`);
             });
           } else {
-                console.log('Keine Datei in der Nachricht enthalten.');
+                await console.log('Keine Datei in der Nachricht enthalten.');
           }
     /* ### DnD-Sheet-Gen ENDE ### */
-    
+
 	},
 };
