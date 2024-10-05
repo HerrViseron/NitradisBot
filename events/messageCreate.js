@@ -36,7 +36,7 @@ module.exports = {
             console.log(`File uploaded: ${attachment.url}`);
     
             // The Attachment will be handed over to the Sheet Generator Funktion, the rest is handled over there
-            genDnDCharSheet(attachment, message.author.username, message.channel);
+            genDnDCharSheet(attachment, message.author, message.channel);
 
         });
 
