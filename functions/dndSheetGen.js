@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext } = require('discord.js');
 const { PDFDocument } = require('pdf-lib');
 
 
@@ -37,8 +38,8 @@ async function fillPdfFormWithMapping(jsonDataPath, pdfTemplatePath, outputPdfPa
     console.log(`PDF-Formular erfolgreich ausgefüllt und unter ${outputPdfPath} gespeichert.`);
 }
 
-async function genDnDCharSheet(attachment, author, channel) {
-    channel.send(`<@${author.id}>, Danke, für deine Datei ${attachment.name}`)
+async function genDnDCharSheet(character, author, channel) {
+    channel.send(`<@${author.id}>, Danke, für deinen Character "${bold(character.name)}"`)
 };
 
 module.exports = { genDnDCharSheet };
