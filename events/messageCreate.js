@@ -9,6 +9,9 @@ const ALLOWED_MIME_TYPES_DND_SHEET_GEN = ['application/json']; // Allowed MIME-T
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
+    /* ### Ignore all Messages sent by the bot itself ### */	  
+    if (message.author.id === client.user.id) return;
+
     /* ### Convert uploaded JSON Files from FoundryVTT to a DnD Character PDF Sheet ### */	  
         // Check if Message was send in the right Channel, return otherwise
         if (message.channel.id !== CHANNEL_ID_DND_SHEET_GEN) return;
