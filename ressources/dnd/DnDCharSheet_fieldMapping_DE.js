@@ -21,4 +21,4 @@ const fieldMapping = {
     "system.abilities.cha.value": "Cha",
     "system.abilities.cha.proficient": "ChaProf",
 };
-module.exports(fieldMapping);
+module.exports = { fieldMapping };
