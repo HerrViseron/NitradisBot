@@ -41,7 +41,7 @@ async function genDnDCharSheet(attachment, author, channel) {
     message.channel.send(`<@${message.author.id}>, Danke, für deine Datei ${attachment.name}`)
 };
 
-module.export = { genDnDCharSheet };
+module.exports = { genDnDCharSheet };
 
 // Beispielaufruf der Funktion
 //const jsonDataPath = './form-data.json'; // Pfad zur JSON-Datei
