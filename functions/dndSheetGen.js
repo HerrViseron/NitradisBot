@@ -90,7 +90,7 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
 }
 
 async function genDnDCharSheet(character, author, channel) {
-    console.log("Current directory:", __dirname);
+    //console.log("Current directory:", __dirname);
     const pdfTemplatePath = "/usr/src/nitradisbot/ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
     const pdfOutputDir = "/tmp/"
     const DateTZString = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
