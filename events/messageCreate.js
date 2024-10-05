@@ -22,11 +22,10 @@ module.exports = {
                 // Beispiel: Du kannst die Datei herunterladen oder weiterverarbeiten
                 // Dafür brauchst du ggf. Bibliotheken wie `node-fetch` oder `axios`, um die Datei herunterzuladen
         
-                message.channel.send(`Danke für das Hochladen der Datei: ${attachment.name}`);
+                message.channel.reply(`Danke für das Hochladen der Datei: ${attachment.name}`);
+                //message.channel.send(`Danke für das Hochladen der Datei: ${attachment.name}`);
             });
-          } else {
-                console.log('Keine Datei in der Nachricht enthalten.');
-          }
+        }
     /* ### DnD-Sheet-Gen ENDE ### */
 
 	},
