@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext } = require('discord.js');
+const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext, Attachment } = require('discord.js');
 const { PDFDocument } = require('pdf-lib');
 
 
@@ -9,37 +9,55 @@ function getNestedValue(obj, keyPath) {
 }
 
 // Funktion zum Laden des PDF-Formulars und der JSON-Daten
-async function fillPdfFormWithMapping(jsonDataPath, pdfTemplatePath, outputPdfPath, fieldMapping) {
-    // Lade die JSON-Daten
-    const jsonData = JSON.parse(fs.readFileSync(jsonDataPath, 'utf8'));
-  
-    // Lade das PDF-Template
+async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, fieldMapping) {
+    // Load PDF Template
     const existingPdfBytes = fs.readFileSync(pdfTemplatePath);
   
-    // Erstelle ein neues PDF-Dokument auf Basis des Templates
+    // Create a new PDF-File form Template
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
   
-    // Greife auf die Formularfelder zu
+    // Get the PDF Form
     const form = pdfDoc.getForm();
   
-    // Fülle die Formularfelder basierend auf den JSON-Daten und dem Mapping aus
+    // Fill the formfield based on the JSON and Mapping Data
     Object.keys(fieldMapping).forEach(jsonKey => {
-        const pdfFieldName = fieldMapping[jsonKey]; // Hole den entsprechenden PDF-Feldnamen
-        const field = form.getField(pdfFieldName);  // Greife auf das Formularfeld im PDF zu
-        const value = getNestedValue(jsonData, jsonKey); // Greife auf den verschachtelten JSON-Wert zu
+        const pdfFieldName = fieldMapping[jsonKey]; // Get the corresponding PDF Fieldname
+        const field = form.getField(pdfFieldName);  // Access the field in the PDF
+        const value = getNestedValue(jsonData, jsonKey); // get the Mapping with nested JSON Objects
         if (field && value !== undefined) {
-            field.setText(value); // Setze den Text des Formularfeldes
+            field.setText(value); // Set the field Content
         }
     });
   
-    // Speichere das ausgefüllte PDF-Dokument
+    // Save the PDF file
     const pdfBytes = await pdfDoc.save();
     fs.writeFileSync(outputPdfPath, pdfBytes);
-    console.log(`PDF-Formular erfolgreich ausgefüllt und unter ${outputPdfPath} gespeichert.`);
+    console.log(`PDF-Form successfully saved unter ${outputPdfPath}`);
 }
 
 async function genDnDCharSheet(character, author, channel) {
-    channel.send(`<@${author.id}>, Hier ist dein Charakter Sheet für "${bold(character.name)}"`)
+    const pdfTemplatePath = "../ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
+    const pdfOutputDir = "/tmp/"
+    const currentDate = new Date();
+    const dateString = `${currentDate.getFullYear()}${currentDate.getMonth}${currentDate.getDay}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
+    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`
+    const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`
+    const fieldMappingFile = '../ressources/dnd/DnDCharSheet_fieldMapping_DE.js'
+
+    //Start the PDF File Mapping and Filling
+    await fillPdfFormWithMapping(character, pdfTemplatePath, pdfOutputPath, fieldMappingFile);
+
+    //send the saved File to the User
+    await channel.send(`<@${author.id}>, Hier ist dein Charakter Sheet für "${bold(character.name)}"`, {
+        files: [{
+            attachment: pdfOutputPath,
+            name: pdfOutputName,
+            description: `Character Sheet für ${character.name}`
+        }]
+    })
+
+    //clean up PDF File from local storage
+    fs.unlinkSync(pdfOutputPath);
 };
 
 module.exports = { genDnDCharSheet };
