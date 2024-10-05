@@ -23,13 +23,13 @@ module.exports = {
         // Hole die Datei-Anhänge aus der Nachricht
         message.attachments.forEach(attachment => {
             
-            if (!ALLOWED_MIME_TYPES_DND_SHEET_GEN.includes(attachement.contentType)) {
+            if (!ALLOWED_MIME_TYPES_DND_SHEET_GEN.includes(attachment.contentType)) {
                 console.log(`No allowed MIME-Type`);
                 return;
             }
 
             // Hier kannst du den Link zur Datei verwenden
-            console.log(`Datei hochgeladen: ${attachment.url}`);
+            console.log(`Datei hochgeladen: ${attachment.name}`);
     
             // Beispiel: Du kannst die Datei herunterladen oder weiterverarbeiten
             // Dafür brauchst du ggf. Bibliotheken wie `node-fetch` oder `axios`, um die Datei herunterzuladen
