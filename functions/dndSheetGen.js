@@ -94,7 +94,7 @@ async function genDnDCharSheet(character, author, channel) {
     const pdfTemplatePath = "/usr/src/nitradisbot/ressources/dnd/DnD_5E_CharacterSheet_DE_FormFillable.pdf";
     const pdfOutputDir = "/tmp/"
     const DateTZString = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
-    const currentDate = new Date(DateTZ);
+    const currentDate = new Date(DateTZString);
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()}${currentDate.getDay()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`;
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`;
