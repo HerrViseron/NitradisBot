@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext, Attachment } = require('discord.js');
+const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext, Attachment, AttachmentBuilder } = require('discord.js');
 const { PDFDocument } = require('pdf-lib');
 
 
@@ -104,12 +104,10 @@ async function genDnDCharSheet(character, author, channel) {
     await fillPdfFormWithMapping(character, pdfTemplatePath, pdfOutputPath, charSheetField.fieldMapping);
 
     //send the saved File to the User
-    await channel.send(`<@${author.id}>, Hier ist dein Charakter Sheet für "${bold(character.name)}"`, {
-        files: [{
-            attachment: pdfOutputPath,
-            name: pdfOutputName,
-            description: `Character Sheet für ${character.name}`
-        }]
+    const attachment = new AttachmentBuilder(pdfOutputPath, { name: pdfOutputName, description: `Character Sheet für ${character.name}` });
+    await channel.send({
+        content: `<@${author.id}>, Hier ist dein Charakter Sheet für "${bold(character.name)}"`,
+        files: [attachment]
     });
 
     //clean up PDF File from local storage
