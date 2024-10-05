@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 const { genDnDCharSheet } = require('../functions/dndSheetGen')
 
