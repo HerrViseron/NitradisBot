@@ -38,7 +38,7 @@ async function fillPdfFormWithMapping(jsonDataPath, pdfTemplatePath, outputPdfPa
 }
 
 async function genDnDCharSheet(attachment, author, channel) {
-    message.channel.send(`<@${message.author.id}>, Danke, für deine Datei ${attachment.name}`)
+    channel.send(`<@${author.id}>, Danke, für deine Datei ${attachment.name}`)
 };
 
 module.exports = { genDnDCharSheet };
