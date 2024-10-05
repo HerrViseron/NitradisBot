@@ -20,6 +20,10 @@ module.exports = {
             mimeType = attachment.contentType.split(';')[0].trim(); // Only retrieve the MIME-Type and ignore everything after that
             if (!ALLOWED_MIME_TYPES_DND_SHEET_GEN.includes(mimeType)) {
                 console.log(`No allowed MIME-Type, uploaded: ${attachment.contentType}`);
+                message.delete()
+                    .then(message.channel.send(`<@${message.author.id}>, dein Upload hat leider nicht das richtige Datei Format.`))
+                    .then(msg => console.log(`Deleted message from ${msg.author.username}`))
+                    .catch(console.error);
                 return;
             }
 
