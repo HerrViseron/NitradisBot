@@ -156,7 +156,24 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
             console.log(`The field type "${field.constructor.name}" is not supported!`);
         }
     }
-  
+
+    //Finally add the current Date and Time to the corner of each page, just for convenience
+
+    const currentDate = new Date().toLocaleDateString('de-DE');
+    const pdfPages = pdfDoc.getPages();
+    const fontSize = 12;
+    const fontColor = rgb(0, 0, 0);  // Black
+    for (const page of pdfPages) {
+        const { width, height } = page.getSize();
+        //Add the Text
+        page.drawText(currentDate, {
+            x: 10,
+            y: height - fontSize - 10,
+            size: fontSize,
+            color: fontColor,
+        });
+    }
+
     // Save the PDF file
     const pdfBytes = await pdfDoc.save();
     fs.writeFileSync(outputPdfPath, pdfBytes);
@@ -173,7 +190,7 @@ async function genDnDCharSheet(character, author, channel) {
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     //console.log(`DateTZString: ${DateTZString}, currentDate: ${currentDate}, dateString: ${dateString}`);
     const pdfUUID = uuidv7();
-    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}_${pdfUUID}.pdf`;
+    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${pdfUUID}.pdf`;
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`;
     const charSheetField = require('../ressources/dnd/DnDCharSheet_fieldMapping_DE');
 
