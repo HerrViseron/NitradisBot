@@ -176,7 +176,7 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
     // Save the PDF file
     const pdfBytes = await pdfDoc.save();
     fs.writeFileSync(outputPdfPath, pdfBytes);
-    console.log(`PDF-Form successfully saved unter ${outputPdfPath}`);
+    console.log(`PDF-Form successfully saved under ${outputPdfPath}`);
 }
 
 async function genDnDCharSheet(character, author, channel) {
