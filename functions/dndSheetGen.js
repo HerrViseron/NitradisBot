@@ -21,6 +21,8 @@ function calculateValue(jsonData, calcFunction) {
                 if (charClassNames != '') charClassNames += '; '; //If there is already a class in the strin then append with a semicolon and a whitespace
                 charClassNames += `${charClass.name} ${charClass.system.level}`; //append the class and Level to the string
             }
+            return charClassNames;
+            //no Break since we always return above
         }
         case 'baseProficiency': {
             let charLevel = 0;
@@ -35,7 +37,7 @@ function calculateValue(jsonData, calcFunction) {
             if (charLevel >= 13 && charLevel <= 16) return 5;
             if (charLevel >= 17 && charLevel <= 20) return 6;
             return 0;
-            //no Break since we always return above  
+            //no Break since we always return above
         }
         default:
             return 0;
