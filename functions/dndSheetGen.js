@@ -18,7 +18,7 @@ function calculateValue(jsonData, calcFunction) {
             let charLevel = 0;
             const charClasses = jsonData.items.filter(item => item.type === 'class');
             for (const charClass in charClasses) {
-                charLevel += charClass.level;
+                charLevel += charClass.levels;
             }
             if (charLevel === 0) return 0;
             if (charLevel >= 1 && charLevel <= 4) return 2;
@@ -70,7 +70,6 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'searchID':
                 const itemObject = jsonData.items.find(item => item._id === value);
-                console.log(field);
                 if(append){
                     field = field.split('_')[0].trim(); //Keys in pdfFieldMapping need to be uinique, so we have to add a suffix which needs to be removed when we append to a field
                     if(!pdfData[field]){
