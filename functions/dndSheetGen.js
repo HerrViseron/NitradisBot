@@ -1,8 +1,7 @@
 const fs = require('fs');
 const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext, Attachment, AttachmentBuilder } = require('discord.js');
-const { PDFDocument } = require('pdf-lib');
+const { PDFDocument, rgb } = require('pdf-lib');
 const { v7: uuidv7 } = require('uuid');
-
 
 // Hilfsfunktion, um auf verschachtelte JSON-Schlüssel zuzugreifen
 function getNestedValue(obj, path) {
@@ -158,7 +157,6 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
     }
 
     //Finally add the current Date and Time to the corner of each page, just for convenience
-
     const currentDate = new Date().toLocaleDateString('de-DE');
     const pdfPages = pdfDoc.getPages();
     const fontSize = 12;
@@ -187,7 +185,7 @@ async function genDnDCharSheet(character, author, channel) {
     //const DateTZString = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
     //const currentDate = new Date(DateTZString);
     const currentDate = new Date();
-    const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
+    //const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     //console.log(`DateTZString: ${DateTZString}, currentDate: ${currentDate}, dateString: ${dateString}`);
     const pdfUUID = uuidv7();
     const pdfOutputName = `${character.name.replaceAll(' ', '')}_${pdfUUID}.pdf`;
