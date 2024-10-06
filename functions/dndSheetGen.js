@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext, Attachment, AttachmentBuilder } = require('discord.js');
 const { PDFDocument } = require('pdf-lib');
+const { v7: uuidv7 } = require('uuid');
 
 
 // Hilfsfunktion, um auf verschachtelte JSON-Schlüssel zuzugreifen
@@ -171,7 +172,8 @@ async function genDnDCharSheet(character, author, channel) {
     const currentDate = new Date();
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     //console.log(`DateTZString: ${DateTZString}, currentDate: ${currentDate}, dateString: ${dateString}`);
-    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`;
+    const pdfUUID = uuidv7().split('-')[0];
+    const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}_${pdfUUID}.pdf`;
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`;
     const charSheetField = require('../ressources/dnd/DnDCharSheet_fieldMapping_DE');
 
