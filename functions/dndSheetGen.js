@@ -4,8 +4,8 @@ const { PDFDocument } = require('pdf-lib');
 
 
 // Hilfsfunktion, um auf verschachtelte JSON-Schlüssel zuzugreifen
-function getNestedValue(obj, keyPath) {
-    return keyPath.split('.').reduce((acc, key) => acc && acc[key], obj);
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
 }
 
 function getValueFromJsonByPath(jsonData, path) {
@@ -38,7 +38,8 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'searchID':
                 const itemObject = jsonData.items.find(item => item._id === value);
-                pdfData[field] = itemObject[attr];
+                //pdfData[field] = itemObject[attr];
+                pdfData[field] = getNestedValue(itemObject, attr);
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
