@@ -19,6 +19,7 @@ function calculateValue(jsonData, calcFunction) {
             const charClasses = jsonData.items.filter(item => item.type === 'class');
             console.log(`CharLevel: ${charLevel}`);
             for (const charClass in charClasses) {
+                console.log(charClass);
                 charLevel += charClass.levels;
                 console.log(`CharLevel: ${charLevel}`);
             }
