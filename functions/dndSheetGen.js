@@ -12,11 +12,21 @@ function getValueFromJsonByPath(jsonData, path) {
     return path.split('.').reduce((prev, curr) => prev ? prev[curr] : undefined, jsonData);
 }
 
+function calculateValue(jsonData, calcFunction) {
+    switch (calcFunction) {
+        case 'baseProficiency':
+            return 2;
+            //no Break since we return above            
+        default:
+            return 0;
+    }
+}
+
 function convertJsonToPdfData(jsonData, pdfFieldMapping) {
     const pdfData = {};
 
     for (let field in pdfFieldMapping) {
-        const { jsonPath, type, attr, append } = pdfFieldMapping[field];
+        const { jsonPath, type, attr, append, calcFunction} = pdfFieldMapping[field];
         let value = getValueFromJsonByPath(jsonData, jsonPath);
 
         // Konvertiere den Wert basierend auf dem Typ
@@ -53,6 +63,10 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 }else{
                     pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
                 }
+                console.log(pdfData[field]); //Some more Debugging
+                break;
+            case 'calculateValue':
+                pdfData[field] = calculateValue(jsonData, calcFunction).toString(); // getting the value with a calculation function and always convert to string
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
