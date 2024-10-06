@@ -16,13 +16,20 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
     const pdfData = {};
 
     for (let field in pdfFieldMapping) {
-        const { jsonPath, type, attr } = pdfFieldMapping[field];
+        const { jsonPath, type, attr, append } = pdfFieldMapping[field];
         let value = getValueFromJsonByPath(jsonData, jsonPath);
 
         // Konvertiere den Wert basierend auf dem Typ
         switch (type) {
             case 'string':
-                pdfData[field] = value ? value.toString() : ''; // Convert to String
+                if(append){    
+                    if(!pdfData[field]){
+                        pdfData[field] = ''; //just to be sure
+                    }
+                    pdfData[field] += value ? value.toString() : ''; // Convert to String
+                }else{
+                    pdfData[field] = value ? value.toString() : ''; // Convert to String
+                }
                 break;
             case 'number':
                 pdfData[field] = typeof value === 'number' ? value : '0'; // Convert Numbers to String for PDF-Field
@@ -38,8 +45,14 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'searchID':
                 const itemObject = jsonData.items.find(item => item._id === value);
-                console.log(itemObject);
-                pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
+                if(append){
+                    if(!pdfData[field]){
+                        pdfData[field] = ''; //just to be sure
+                    }
+                    pdfData[field] += getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
+                }else{
+                    pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
+                }
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
