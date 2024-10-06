@@ -165,7 +165,7 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
     for (const page of pdfPages) {
         const { width, height } = page.getSize();
         //Add the Text
-        page.drawText(currentDate, {
+        page.drawText("Dies ist ein Test", {
             x: 10,
             y: height - fontSize - 10,
             size: fontSize,
@@ -185,7 +185,7 @@ async function genDnDCharSheet(character, author, channel) {
     const pdfOutputDir = "/tmp/"
     //const DateTZString = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
     //const currentDate = new Date(DateTZString);
-    const currentDate = new Date();
+    //const currentDate = new Date();
     //const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     //console.log(`DateTZString: ${DateTZString}, currentDate: ${currentDate}, dateString: ${dateString}`);
     const pdfUUID = uuidv7();
