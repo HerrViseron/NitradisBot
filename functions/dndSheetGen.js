@@ -14,20 +14,29 @@ function getValueFromJsonByPath(jsonData, path) {
 
 function calculateValue(jsonData, calcFunction) {
     switch (calcFunction) {
-        case 'baseProficiency':
+        case 'charClasses': { //Needs to be a block to declare the same Variable in multiple cases
+            let charClassNames = '';
+            const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
+            for (const charClass of charClasses) {
+                if (charClassNames != '') charClassNames += '; '; //If there is already a class in the strin then append with a semicolon and a whitespace
+                charClassNames += `${charClass.name} ${charClass.system.level}`; //append the class and Level to the string
+            }
+        }
+        case 'baseProficiency': {
             let charLevel = 0;
-            const charClasses = jsonData.items.filter(item => item.type === 'class');
+            const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
             for (const charClass of charClasses) {
                 charLevel += charClass.system.levels;
             }
-            if (charLevel === 0) return 0;
+            if (charLevel === 0) return 0; //return value based on Char Level
             if (charLevel >= 1 && charLevel <= 4) return 2;
             if (charLevel >= 5 && charLevel <= 8) return 3;
             if (charLevel >= 9 && charLevel <= 12) return 4;
             if (charLevel >= 13 && charLevel <= 16) return 5;
             if (charLevel >= 17 && charLevel <= 20) return 6;
             return 0;
-            //no Break since we always return above           
+            //no Break since we always return above  
+        }
         default:
             return 0;
     }
