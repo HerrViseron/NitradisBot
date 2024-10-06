@@ -38,7 +38,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'searchID':
                 const itemObject = jsonData.items.find(item => item._id === value);
-                pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, will see how far we get with this
+                pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
