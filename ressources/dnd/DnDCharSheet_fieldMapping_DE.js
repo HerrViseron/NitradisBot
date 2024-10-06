@@ -61,7 +61,8 @@ const fieldMapping = {
     'TrefferpunkteMaximum': { jsonPath: 'system.attributes.hp.value', type: 'string' },
     'AktTrefferpunkte': { jsonPath: 'system.attributes.hp.value', type: 'string' },
     'TempTrefferpunkte': { jsonPath: 'system.attributes.hp.temp', type: 'string' },
-    //Char Background
+    //Char Background and some Details from that
     'Volk': { jsonPath: 'system.details.race', type: 'searchID', attr: 'name' },
+    'Bewegungsrate': { jsonPath: 'system.details.race', type: 'searchID', attr: 'system.movement.walk' },
 };
 module.exports = { fieldMapping };
