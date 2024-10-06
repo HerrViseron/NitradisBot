@@ -67,6 +67,6 @@ const fieldMapping = {
     'Hintergrund': { jsonPath: 'system.details.background', type: 'searchID', attr: 'name' },
     'Erfahrungspunkte': { jsonPath: 'system.details.xp.value', type: 'string'},
     'KlasseUndStufe': { jsonPath: 'system.details.originalClass', type: 'searchID', attr: 'name'},
-    'KlasseUndStufe': { jsonPath: 'system.details.originalClass', type: 'searchID', attr: 'system.levels', append: true},
+    'KlasseUndStufe_2': { jsonPath: 'system.details.originalClass', type: 'searchID', attr: 'system.levels', append: true},
 };
 module.exports = { fieldMapping };

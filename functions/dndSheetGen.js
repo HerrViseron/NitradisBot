@@ -33,6 +33,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
         switch (type) {
             case 'string':
                 if(append){    
+                    field = field.split('_')[0].trim(); //Keys in pdfFieldMapping need to be uinique, so we have to add a suffix which needs to be removed when we append to a field
                     if(!pdfData[field]){
                         pdfData[field] = ''; //just to be sure
                     }
@@ -57,16 +58,14 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 const itemObject = jsonData.items.find(item => item._id === value);
                 console.log(field);
                 if(append){
-                    console.log('appending');
+                    field = field.split('_')[0].trim(); //Keys in pdfFieldMapping need to be uinique, so we have to add a suffix which needs to be removed when we append to a field
                     if(!pdfData[field]){
                         pdfData[field] = ''; //just to be sure
                     }
                     pdfData[field] += getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
                 }else{
-                    console.log('not appending');
                     pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
                 }
-                console.log(pdfData[field]); //Some more Debugging
                 break;
             case 'calculateValue':
                 pdfData[field] = calculateValue(jsonData, calcFunction).toString(); // getting the value with a calculation function and always convert to string
