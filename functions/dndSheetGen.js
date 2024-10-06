@@ -17,11 +17,8 @@ function calculateValue(jsonData, calcFunction) {
         case 'baseProficiency':
             let charLevel = 0;
             const charClasses = jsonData.items.filter(item => item.type === 'class');
-            console.log(`CharClasses: ${JSON.stringify(charClasses)}`);
             for (const charClass of charClasses) {
-                console.log(charClass);
-                charLevel += charClass.levels;
-                console.log(`CharLevel: ${charLevel}`);
+                charLevel += charClass.system.levels;
             }
             if (charLevel === 0) return 0;
             if (charLevel >= 1 && charLevel <= 4) return 2;
