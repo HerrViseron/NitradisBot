@@ -38,7 +38,10 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
 
     for (let field in pdfFieldMapping) {
         const { jsonPath, type, attr, append, calcFunction} = pdfFieldMapping[field];
-        let value = getValueFromJsonByPath(jsonData, jsonPath);
+        let value = 0;
+        if(type != 'calculateValue'){ //when we calculate the Value, we dont have a specific JSON Path to search for
+            value = getValueFromJsonByPath(jsonData, jsonPath);
+        }
 
         // Konvertiere den Wert basierend auf dem Typ
         switch (type) {
