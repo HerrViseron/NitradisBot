@@ -39,6 +39,15 @@ function calculateValue(jsonData, calcFunction) {
             return 0;
             //no Break since we always return above
         }
+        case 'hitDice': {
+            let charHitDice = '';
+            const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
+            for (const charClass of charClasses) {
+                if (charHitDice != '') charClassNames += ' + '; //If there is already a class in the strin then append with a semicolon and a whitespace
+                charHitDice += `${charClass.system.levels}x${charClass.system.hitDice.replaceAll('d',"W")}`; //Hit Dice times Class Level and change d to W for German
+            }
+            return charHitDice;
+        }
         default:
             return 0;
     }
