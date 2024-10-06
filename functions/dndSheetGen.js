@@ -37,7 +37,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                     if(!pdfData[field]){
                         pdfData[field] = ''; //just to be sure
                     }
-                    pdfData[field] += value ? value.toString() : ''; // Convert to String
+                    pdfData[field] += ` ${value ? value.toString() : ''}`; // Convert to String
                 }else{
                     pdfData[field] = value ? value.toString() : ''; // Convert to String
                 }
@@ -62,7 +62,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                     if(!pdfData[field]){
                         pdfData[field] = ''; //just to be sure
                     }
-                    pdfData[field] += getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
+                    pdfData[field] += ` ${getNestedValue(itemObject, attr).toString()}`; //always make a string out of it, we'll see how far we get with this
                 }else{
                     pdfData[field] = getNestedValue(itemObject, attr).toString(); //always make a string out of it, we'll see how far we get with this
                 }
