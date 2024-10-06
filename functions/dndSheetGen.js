@@ -96,7 +96,7 @@ async function genDnDCharSheet(character, author, channel) {
     //const DateTZString = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
     //const currentDate = new Date(DateTZString);
     const currentDate = new Date();
-    const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()}${currentDate.getDay()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
+    const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     //console.log(`DateTZString: ${DateTZString}, currentDate: ${currentDate}, dateString: ${dateString}`);
     const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}.pdf`;
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`;
