@@ -158,6 +158,7 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
 
     //Finally add the current Date and Time to the corner of each page, just for convenience
     const currentDate = new Date().toLocaleDateString('de-DE');
+    console.log(currentDate);
     const pdfPages = pdfDoc.getPages();
     const fontSize = 12;
     const fontColor = rgb(0, 0, 0);  // Black
