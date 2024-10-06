@@ -25,10 +25,16 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 pdfData[field] = value ? value.toString() : ''; // Convert to String
                 break;
             case 'number':
-                pdfData[field] = typeof value === 'number' ? value : '0'; // Zahlen in String für PDF-Felder
+                pdfData[field] = typeof value === 'number' ? value : '0'; // Convert Numbers to String for PDF-Field
                 break;
             case 'checkbox':
                 pdfData[field] = value === 1 || value === true ? true : false; // Checkboxes in PDF are weird...
+                break;
+            case 'checkboxSkillProf':
+                pdfData[field] = value === 1 || value === 2 || value === true ? true : false; // Proficieny is granted if value is 1 or 2
+                break;
+            case 'checkboxSkillExp':
+                pdfData[field] = value === 2 ? true : false; // Experience is only active if Value equals two
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
