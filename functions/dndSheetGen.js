@@ -157,8 +157,8 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
     }
 
     //Finally add the current Date and Time to the corner of each page, just for convenience
+    /* ToDo for later
     const currentDate = new Date().toLocaleString('de-DE');
-    console.log(currentDate);
     const pdfPages = pdfDoc.getPages();
     const fontSize = 12;
     const fontColor = rgb(0, 0, 0);  // Black
@@ -172,7 +172,8 @@ async function fillPdfFormWithMapping(jsonData, pdfTemplatePath, outputPdfPath, 
             color: fontColor,
         });
     }
-
+    */
+   
     // Save the PDF file
     const pdfBytes = await pdfDoc.save();
     fs.writeFileSync(outputPdfPath, pdfBytes);
