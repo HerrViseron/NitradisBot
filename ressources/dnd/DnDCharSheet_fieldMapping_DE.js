@@ -2,11 +2,11 @@ const fieldMapping = {
     'Charaktername_page1': { jsonPath: 'name', type: 'string' },
     'Charaktername_page2': { jsonPath: 'name', type: 'string' },
     // Money Money Money
-    'PM': { jsonPath: 'system.currency.pp.value', type: 'string' },
-    'GM': { jsonPath: 'system.currency.gp.value', type: 'string' },
-    'EM': { jsonPath: 'system.currency.ep.value', type: 'string' },
-    'SM': { jsonPath: 'system.currency.sp.value', type: 'string' },
-    'KM': { jsonPath: 'system.currency.cp.value', type: 'string' },
+    'PM': { jsonPath: 'system.currency.pp', type: 'string' },
+    'GM': { jsonPath: 'system.currency.gp', type: 'string' },
+    'EM': { jsonPath: 'system.currency.ep', type: 'string' },
+    'SM': { jsonPath: 'system.currency.sp', type: 'string' },
+    'KM': { jsonPath: 'system.currency.cp', type: 'string' },
     //Char Stats
     'Str': { jsonPath: 'system.abilities.str.value', type: 'string' },
     'StrProf': { jsonPath: 'system.abilities.str.proficient', type: 'checkbox' },
