@@ -19,7 +19,7 @@ function calculateValue(jsonData, calcFunction) {
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
             for (const charClass of charClasses) {
                 if (charClassNames != '') charClassNames += '; '; //If there is already a class in the strin then append with a semicolon and a whitespace
-                charClassNames += `${charClass.name} ${charClass.system.level}`; //append the class and Level to the string
+                charClassNames += `${charClass.name} ${charClass.system.levels}`; //append the class and Level to the string
             }
             return charClassNames;
             //no Break since we always return above
