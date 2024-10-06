@@ -37,7 +37,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 pdfData[field] = value === 2 ? true : false; // Experience is only active if Value equals two
                 break;
             case 'searchID':
-                const itemObject = items.find(item => item._id === value);
+                const itemObject = jsonData.items.find(item => item._id === value);
                 pdfData[field] = itemObject[attr];
                 break;
             default:
