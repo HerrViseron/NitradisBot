@@ -172,7 +172,7 @@ async function genDnDCharSheet(character, author, channel) {
     const currentDate = new Date();
     const dateString = `${currentDate.getFullYear()}${currentDate.getMonth()+1}${currentDate.getDate()}-${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}`;
     //console.log(`DateTZString: ${DateTZString}, currentDate: ${currentDate}, dateString: ${dateString}`);
-    const pdfUUID = uuidv7().split('-')[0];
+    const pdfUUID = uuidv7();
     const pdfOutputName = `${character.name.replaceAll(' ', '')}_${dateString}_${pdfUUID}.pdf`;
     const pdfOutputPath = `${pdfOutputDir}${pdfOutputName}`;
     const charSheetField = require('../ressources/dnd/DnDCharSheet_fieldMapping_DE');
