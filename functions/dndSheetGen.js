@@ -16,7 +16,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
     const pdfData = {};
 
     for (let field in pdfFieldMapping) {
-        const { jsonPath, type } = pdfFieldMapping[field];
+        const { jsonPath, type, attr } = pdfFieldMapping[field];
         let value = getValueFromJsonByPath(jsonData, jsonPath);
 
         // Konvertiere den Wert basierend auf dem Typ
@@ -35,6 +35,10 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'checkboxSkillExp':
                 pdfData[field] = value === 2 ? true : false; // Experience is only active if Value equals two
+                break;
+            case 'searchID':
+                const itemObject = items.find(item => item._id === value);
+                pdfData[field] = itemObject[attr];
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
