@@ -68,12 +68,12 @@ function calculateValue(jsonData, calcFunction) {
             if (charArmorEffectsItems.length > 0) {
                 //Actually we still have items here but naming everything correctly is hard, I try my best...
                 const firstArmorEffectItem = charArmorEffectsItems[0]; //There should only be one Effect that is not disables, if there are more, the forst one wins
-                console.log("The Whole Item:");
-                console.log(firstArmorEffectItem);
                 const armorEffects = firstArmorEffectItem?.effects.find(effect =>
                     !effect.disabled &&
                     effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                 ); //now we have the effects separated and we have the effect that is enabled and affects the AC
+                console.log("All the Effects:");
+                console.log(armorEffects);
                 const firstArmorEffect = armorEffects[0]; //Making sure we just use the fist effect if there are more than one.
                 console.log("The firstArmorEffect:");
                 console.log(firstArmorEffect);
