@@ -77,7 +77,7 @@ function calculateValue(jsonData, calcFunction) {
                 console.log("The Armor Effects:");
                 console.log(armorEffects);
                 const firstArmorEffect = armorEffects[0]; //Making sure we just use the fist effect if there are more than one.
-                const armorChange = firstArmorEffect?.changes.find(change => change.key === 'system.attributes.ac.calc'); //Get the right change, there might be more than one change but only one should effect the AC 
+                const armorChange = firstArmorEffect.changes.find(change => change.key === 'system.attributes.ac.calc'); //Get the right change, there might be more than one change but only one should effect the AC 
                 console.log("The Armor Change:");
                 console.log(armorChange);
                 charArmorClassCalcType = armorChange ? armorChange.value : "default"; //Here we finally have the ArmorClass Calculation Type
