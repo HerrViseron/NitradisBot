@@ -77,7 +77,7 @@ function calculateValue(jsonData, calcFunction) {
             //First we always need the Dex Modifier of the char:
             const charDexValue = jsonData.system.abilities.dex.value;
             console.log(charDexValue);
-            const charDexMod = Math.floor((10 - charDexValue) / 2);
+            const charDexMod = Math.floor((charDexValue - 10) / 2);
             console.log(charDexMod);
             switch (charArmorClassCalcType) {
                 case 'default': {
