@@ -68,16 +68,11 @@ function calculateValue(jsonData, calcFunction) {
             if (charArmorEffectsItems.length > 0) {
                 //Actually we still have items here but naming everything correctly is hard, I try my best...
                 const firstArmorEffectItem = charArmorEffectsItems[0]; //There should only be one Effect that is not disables, if there are more, the forst one wins
-                const armorEffects = firstArmorEffectItem?.effects.find(effect =>
+                const armorEffect = firstArmorEffectItem?.effects.find(effect =>
                     !effect.disabled &&
                     effect.changes.some(change => change.key === 'system.attributes.ac.calc')
-                ); //now we have the effects separated and we have the effect that is enabled and affects the AC
-                console.log("All the Effects:");
-                console.log(armorEffects);
-                const firstArmorEffect = armorEffects[0]; //Making sure we just use the fist effect if there are more than one.
-                console.log("The firstArmorEffect:");
-                console.log(firstArmorEffect);
-                const armorChange = firstArmorEffect?.changes.find(change => change.key === 'system.attributes.ac.calc'); //Get the right change, there might be more than one change but only one should effect the AC 
+                ); //now we have the effect separated that is enabled and affects the AC
+                const armorChange = armorEffect?.changes.find(change => change.key === 'system.attributes.ac.calc'); //Get the right change, there might be more than one change but only one should effect the AC 
                 console.log("The Armor Change:");
                 console.log(armorChange);
                 charArmorClassCalcType = armorChange ? armorChange.value : "default"; //Here we finally have the ArmorClass Calculation Type
