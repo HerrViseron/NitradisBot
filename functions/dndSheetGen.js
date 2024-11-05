@@ -70,7 +70,7 @@ function calculateValue(jsonData, calcFunction) {
                     effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                 );
                 const acChange = acChangeEffect?.changes.find(change => change.key === 'system.attributes.ac.calc')
-                charArmorClassCalcType = acChange ? change.value : "default";
+                charArmorClassCalcType = acChange ? acChange.value : "default";
             }
             console.log(charArmorClassCalcType);
 
