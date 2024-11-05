@@ -69,8 +69,9 @@ function calculateValue(jsonData, calcFunction) {
                     !effect.disabled &&
                     effect.changes.find(change => change.key === 'system.attributes.ac.calc')
                 );
+                console.log(acEffectChange);
             }
-            console.log(acEffectChange);
+            
 
             return charArmorClassValue;
         }
