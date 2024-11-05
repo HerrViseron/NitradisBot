@@ -86,14 +86,17 @@ function calculateValue(jsonData, calcFunction) {
                 case 'default': {
                     //The Default Armor Calculation, Base of 10 plus Dex Mod, Plus equipped Armor AC Stats
                     charArmorClassValue = 10 + charDexMod;
+                    break; //Here we need breaks...
                 }
                 case 'draconic': {
                     //With Draconic resilience you always have a base AC of 13 plus Dex Mod, nothing else.
                     charArmorClassValue = 13 + charDexMod;
+                    break;
                 }
                 case 'mage': {
                     //With Mage Armor you always have a base AC of 13 plus Dex Mod, nothing else.
                     charArmorClassValue = 13 + charDexMod;
+                    break;
                 }
             }
 
