@@ -59,20 +59,18 @@ function calculateValue(jsonData, calcFunction) {
                 charArmorClassCalcType = charBaseAC.calc;
             }
 
-            const charArmorItems = jsonData.items.filter(item => item.effects.some(effect => 
+            const charArmorEffects = jsonData.items.filter(item => item.effects.some(effect => 
                         !effect.disabled && // Only retrieve item when the AC Effect is not diabled, so we should end up with only one Item for AC Calc change.
                         effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                     )
                 ); //Get all items of char, that have someting which adds to the armor class
-            if (charArmorItems[0] > 0) {
-                const acChangeEffect = charArmorItems[0].effects.find(effect =>
+            if (charArmorEffects[0] > 0) {
+                const acEffectChange = charArmorEffects[0].effects.find(effect =>
                     !effect.disabled &&
-                    effect.changes.some(change => change.key === 'system.attributes.ac.calc')
+                    effect.changes.find(change => change.key === 'system.attributes.ac.calc')
                 );
-                const acChange = acChangeEffect?.changes.find(change => change.key === 'system.attributes.ac.calc')
-                charArmorClassCalcType = acChange ? acChange.value : "default";
             }
-            console.log(charArmorClassCalcType);
+            console.log(acEffectChange);
 
             return charArmorClassValue;
         }
