@@ -69,5 +69,7 @@ const fieldMapping = {
     'KlasseUndStufe': { type: 'calculateValue', calcFunction: 'charClasses'},
     'Übungsbonus': { type: 'calculateValue', calcFunction: 'baseProficiency'},
     'GesamtTW': { type: 'calculateValue', calcFunction: 'hitDice'},
+    //Armor Class, this is difficult becaus it has a lot of different calculations...
+    'Rüstungsklasse': { type: 'calculateValue', calcFunction: 'armorClass'},
 };
 module.exports = { fieldMapping };
