@@ -49,14 +49,30 @@ function calculateValue(jsonData, calcFunction) {
             return charHitDice;
         }
         case 'armorClass': {
-            let charArmorClass = 0;
+            let charArmorClassValue = 0;
+            let charArmorClassCalcType = "default";
             const charBaseAC = jsonData.system.attributes.ac; //The AC from the Attributes Field, seems to be mostly NULL, but also sets the calculation method (which might be overridden later!)
+            if (charBaseAC.value != null) {
+                charArmorClassValue = charBaseAC.value;
+            }
+            if (charBaseAC.calc != "") {
+                charArmorClassCalcType = charBaseAC.calc;
+            }
+
             const charArmorItems = jsonData.items.filter(item => item.effects.some(effect => 
-                                                                                    !effect.disabled && // Only retrieve item when the AC Effect is not diabled, so we should end up with only one Item for AC Calc change.
-                                                                                    effect.changes.some(change => change.key === 'system.attributes.ac.calc')
-                                                                                )
-                                                        ); //Get all items of char, that have someting which adds to the armor class
-            console.log(charArmorItems);
+                        !effect.disabled && // Only retrieve item when the AC Effect is not diabled, so we should end up with only one Item for AC Calc change.
+                        effect.changes.some(change => change.key === 'system.attributes.ac.calc')
+                    )
+                ); //Get all items of char, that have someting which adds to the armor class
+            if (charArmorItems[0] > 0) {
+                const acChangeEffect = charArmorItems[0].effects.find(effect =>
+                    !effect.disabled &&
+                    effect.changes.some(change => change.key === 'system.attributes.ac.calc')
+                );
+                const acChange = acChangeEffect?.changes.find(change => change.key === 'system.attributes.ac.calc')
+                charArmorClassCalcType = acChange ? change.value : "default";
+            }
+            console.log(charArmorClassCalcType);
 
             return charArmorClass;
         }
