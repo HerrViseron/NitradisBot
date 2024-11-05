@@ -77,13 +77,18 @@ function calculateValue(jsonData, calcFunction) {
                 console.log(armorChange);
                 charArmorClassCalcType = armorChange ? armorChange.value : "default"; //Here we finally have the ArmorClass Calculation Type
             }
-            console.log(charArmorClassCalcType);
+            
+            const charArmorEquipment = jsonData.items.filter(item => 
+                item.system.equipped &&
+                item.type === 'equipment'
+            ); //Get all equipment items of char, that are equipped
+            console.log(charArmorEquipment);
+
             //Calculating the actual ArmorClass...
             //First we always need the Dex Modifier of the char:
             const charDexValue = jsonData.system.abilities.dex.value;
-            console.log(charDexValue);
             const charDexMod = Math.floor((charDexValue - 10) / 2);
-            console.log(charDexMod);
+            
             switch (charArmorClassCalcType) {
                 case 'default': {
                     //The Default Armor Calculation, Base of 10 plus Dex Mod, Plus equipped Armor AC Stats
