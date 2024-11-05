@@ -51,7 +51,10 @@ function calculateValue(jsonData, calcFunction) {
         case 'armorClass': {
             let charArmorClass = 0;
             const charBaseAC = jsonData.system.attributes.ac; //The AC from the Attributes Field, seems to be mostly NULL, but also sets the calculation method (which might be overridden later!)
-            const charArmorItems = jsonData.items.filter(item => item.effects.changes.key === 'system.attributes.ac.calc'); //Get all items of char, that have someting which adds to the armor class
+            const charArmorItems = jsonData.items.filter(item => item.effects.some(effect => 
+                                                                                    effect.changes.some(change => change.key === 'system.attributes.ac.calc')
+                                                                                  )
+                                                        ); //Get all items of char, that have someting which adds to the armor class
             console.log(charArmorItems);
 
             return charArmorClass;
