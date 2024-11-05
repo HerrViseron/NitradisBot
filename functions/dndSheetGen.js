@@ -74,7 +74,7 @@ function calculateValue(jsonData, calcFunction) {
             }
             console.log(charArmorClassCalcType);
 
-            return charArmorClass;
+            return charArmorClassValue;
         }
         default:
             return 0;
