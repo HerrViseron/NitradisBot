@@ -75,8 +75,8 @@ function calculateValue(jsonData, calcFunction) {
                     effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                 ); //now we have the effects separated and we have the effect that is enabled and affects the AC
                 const firstArmorEffect = armorEffects[0]; //Making sure we just use the fist effect if there are more than one.
-                console.log("The Armor Effects:");
-                console.log(armorEffects);
+                console.log("The firstArmorEffect:");
+                console.log(firstArmorEffect);
                 const armorChange = firstArmorEffect?.changes.find(change => change.key === 'system.attributes.ac.calc'); //Get the right change, there might be more than one change but only one should effect the AC 
                 console.log("The Armor Change:");
                 console.log(armorChange);
