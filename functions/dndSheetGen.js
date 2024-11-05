@@ -70,7 +70,8 @@ function calculateValue(jsonData, calcFunction) {
                     effect.changes.find(change => change.key === "system.attributes.ac.calc")
                 )
                 const change = effectWithACChange?.changes.find(change => change.key === 'system.attributes.ac.calc');
-                charArmorClassCalcType = change ? change.vaule : "default"; //Here we finally have the ArmorClass Calculation Type
+                console.log(change);
+                charArmorClassCalcType = change ? change.value : "default"; //Here we finally have the ArmorClass Calculation Type
             }
             console.log(charArmorClassCalcType);
             //Calculating the actual ArmorClass...
