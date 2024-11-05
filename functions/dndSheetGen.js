@@ -64,18 +64,33 @@ function calculateValue(jsonData, calcFunction) {
                         effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                     )
                 ); //Get all items of char, that have someting which adds to the armor class
-            console.log(charArmorEffects);
             if (charArmorEffects.length > 0) {
                 const effectWithACChange = charArmorEffects[0].effects.find(effect =>
                     !effect.disabled &
-                    effect.changes.some(change => change.key === "system.attributes.ac.calc")
+                    effect.changes.find(change => change.key === "system.attributes.ac.calc")
                 )
-                console.log(effectWithACChange)
                 const change = effectWithACChange?.changes.find(change => change.key === 'system.attributes.ac.calc');
-                console.log(change);
-                console.log(change.value);
+                charArmorClassCalcType = change ? change.vaule : "default"; //Here we finally have the ArmorClass Calculation Type
             }
             
+            //Calculating the actual ArmorClass...
+            //First we always need the Dex Modifier of the char:
+            const charDexValue = jsonData.system.abilities.dex.value;
+            const charDexMod = Math.floor((10 - charDexValue) / 2);
+            switch (charArmorClassCalcType) {
+                case 'default': {
+                    //The Default Armor Calculation, Base of 10 plus Dex Mod, Plus equipped Armor AC Stats
+                    charArmorClassValue = 10 + charDexMod;
+                }
+                case 'draconic': {
+                    //With Draconic resilience you always have a base AC of 13 plus Dex Mod, nothing else.
+                    charArmorClassValue = 13 + charDexMod;
+                }
+                case 'mage': {
+                    //With Mage Armor you always have a base AC of 13 plus Dex Mod, nothing else.
+                    charArmorClassValue = 13 + charDexMod;
+                }
+            }
 
             return charArmorClassValue;
         }
