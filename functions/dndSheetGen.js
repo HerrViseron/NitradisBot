@@ -64,12 +64,16 @@ function calculateValue(jsonData, calcFunction) {
                         effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                     )
                 ); //Get all items of char, that have someting which adds to the armor class
+            console.log(charArmorEffects);
             if (charArmorEffects[0] > 0) {
-                const acEffectChange = charArmorEffects[0].effects.find(effect =>
-                    !effect.disabled &&
-                    effect.changes.find(change => change.key === 'system.attributes.ac.calc')
-                );
-                console.log(acEffectChange);
+                const effectWithACChange = charArmorEffects[0].effects.find(effect =>
+                    !effect.disabled &
+                    effect.changes.some(change => change.key === "system.attributes.ac.calc")
+                )
+                console.log(effectWithACChange)
+                const change = effectWithACChange?.changes.find(change => change.key === 'system.attributes.ac.calc');
+                console.log(change);
+                console.log(change.value);
             }
             
 
