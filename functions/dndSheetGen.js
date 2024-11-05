@@ -80,7 +80,8 @@ function calculateValue(jsonData, calcFunction) {
             
             const charArmorEquipment = jsonData.items.filter(item => 
                 item.system.equipped &&
-                item.type === 'equipment'
+                item.type === 'equipment' &&
+                item.system.armor != null //only include equiment that gives Armor
             ); //Get all equipment items of char, that are equipped
             console.log(charArmorEquipment);
 
