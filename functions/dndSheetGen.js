@@ -202,10 +202,10 @@ function fillMultiple(jsonData, fillFunction) {
             const charSpellClass = jsonData.items.filter(item => 
                 item.type === 'class' &&
                 item.system.spellcasting.ability === spellAttr
-            ).system.identifier; //Get class of char which has the right spell attribute, Note: the first one will be used in case there are multiple classes with the same attribute
+            ); //Get class of char which has the right spell attribute, Note: the first one will be used in case there are multiple classes with the same attribute
 
             console.log(charClassLevel);
-            console.log(charSpellClass);
+            console.log(charSpellClass.system.identifier);
 
 /* These Values are currently not necessary but i'll keep the code here, just in case.....
             // Known Cantrips:
