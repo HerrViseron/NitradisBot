@@ -189,10 +189,8 @@ function calculateValue(jsonData, calcFunction) {
 function fillMultiple(jsonData, fillFunction) {
     switch (fillFunction) {
         case 'charSpellSlots':
-            console.log('charSpellSlots');
-            //console.log(jsonData);
             //get Spellcasting Attr
-/*            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
             //Get the total Level of the char
             let charClassLevel = [];
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
@@ -208,7 +206,7 @@ function fillMultiple(jsonData, fillFunction) {
 
             console.log(charClassLevel);
             console.log(charSpellClass);
-*/
+
 /* These Values are currently not necessary but i'll keep the code here, just in case.....
             // Known Cantrips:
             const charKnownCantrips = charSpellClass.system.advancement.filter(advancement => 
@@ -224,7 +222,7 @@ function fillMultiple(jsonData, fillFunction) {
             // List of the Spell Slots available to all classes
             // Sources: https://fexlabs.com/5eslots/
             //https://solonarv.github.io/5e-slot-calculator + https://github.com/Solonarv/solonarv.github.io/blob/source/5e-slot-calculator.html
-/*            const slotsByLevel = {
+            const slotsByLevel = {
                 0:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 1:  [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
                 2:  [0, 3, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -246,7 +244,7 @@ function fillMultiple(jsonData, fillFunction) {
                 18: [0, 4, 3, 3, 3, 3, 1, 1, 1, 1],
                 19: [0, 4, 3, 3, 3, 3, 2, 1, 1, 1],
                 20: [0, 4, 3, 3, 3, 3, 2, 2, 1, 1],
-            };*/
+            };
 /*
             let availableSpellSlots = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             switch (charSpellClass.name) {
@@ -320,7 +318,6 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 pdfData[field] = calculateValue(jsonData, calcFunction).toString(); // getting the value with a calculation function and always convert to string
                 break;
             case 'fillMultiple':
-                console.log('fillMultiple');
                 fillMultiple(jsonData, fillFunction); //The value mapping and filling data into the fields is handled in the function itself. Most of the functions here are very specific and only apply to one case!
                 break;
             case 'list':
