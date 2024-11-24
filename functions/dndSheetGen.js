@@ -190,7 +190,7 @@ function fillMultiple(jsonData, fillFunction) {
     switch (fillFunction) {
         case 'charSpellSlots':
             console.log('charSpellSlots');
-            console.log(jsonData);
+            //console.log(jsonData);
             //get Spellcasting Attr
 /*            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
             //Get the total Level of the char
@@ -224,7 +224,7 @@ function fillMultiple(jsonData, fillFunction) {
             // List of the Spell Slots available to all classes
             // Sources: https://fexlabs.com/5eslots/
             //https://solonarv.github.io/5e-slot-calculator + https://github.com/Solonarv/solonarv.github.io/blob/source/5e-slot-calculator.html
-            const slotsByLevel = {
+/*            const slotsByLevel = {
                 0:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 1:  [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
                 2:  [0, 3, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -246,7 +246,7 @@ function fillMultiple(jsonData, fillFunction) {
                 18: [0, 4, 3, 3, 3, 3, 1, 1, 1, 1],
                 19: [0, 4, 3, 3, 3, 3, 2, 1, 1, 1],
                 20: [0, 4, 3, 3, 3, 3, 2, 2, 1, 1],
-            };
+            };*/
 /*
             let availableSpellSlots = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             switch (charSpellClass.name) {
