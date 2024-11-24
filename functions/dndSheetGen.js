@@ -136,6 +136,52 @@ function calculateValue(jsonData, calcFunction) {
             
             return charClasses[0].name;
         }
+        case 'charSpellSaveDC': {
+            //get Spellcasting Attr
+            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+            //get the Modifier of this Attribute
+            const spellAttrValue = getValueFromJsonByPath(jsonData, 'system.abilities.' + spellAttr + '.value');
+            const spellAttrMod = Math.floor((spellAttrValue - 10)/2); //Attribute Value - 10 then deviced by 2 and rounded down
+
+            //Get Char Proficiency Modifier
+            let charLevel = 0;
+            let charProfMod = 0;
+            const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
+            for (const charClass of charClasses) {
+                charLevel += charClass.system.levels;
+            }
+            if (charLevel === 0) charProfMod = 0; //save value based on Char Level
+            if (charLevel >= 1 && charLevel <= 4) charProfMod =  2;
+            if (charLevel >= 5 && charLevel <= 8) charProfMod =  3;
+            if (charLevel >= 9 && charLevel <= 12) charProfMod =  4;
+            if (charLevel >= 13 && charLevel <= 16) charProfMod =  5;
+            if (charLevel >= 17 && charLevel <= 20) charProfMod =  6;
+
+            return 8 + spellAttrMod + charProfMod; //8 + Spellcasting Attribute Modifier + Proficiency modifier ( + special Modfiers, not taken into account here!)
+        }
+        case 'charSpellAttackmod': {
+            //get Spellcasting Attr
+            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+            //get the Modifier of this Attribute
+            const spellAttrValue = getValueFromJsonByPath(jsonData, 'system.abilities.' + spellAttr + '.value');
+            const spellAttrMod = Math.floor((spellAttrValue - 10)/2); //Attribute Value - 10 then deviced by 2 and rounded down
+            
+            //Get Char Proficiency Modifier
+            let charLevel = 0;
+            let charProfMod = 0;
+            const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
+            for (const charClass of charClasses) {
+                charLevel += charClass.system.levels;
+            }
+            if (charLevel === 0) charProfMod = 0; //save value based on Char Level
+            if (charLevel >= 1 && charLevel <= 4) charProfMod =  2;
+            if (charLevel >= 5 && charLevel <= 8) charProfMod =  3;
+            if (charLevel >= 9 && charLevel <= 12) charProfMod =  4;
+            if (charLevel >= 13 && charLevel <= 16) charProfMod =  5;
+            if (charLevel >= 17 && charLevel <= 20) charProfMod =  6;
+
+            return spellAttrMod + charProfMod; //Spellcasting Attribute Modifier + Proficiency modifier
+        }
         default:
             return 0;
     }

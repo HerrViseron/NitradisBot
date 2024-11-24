@@ -76,6 +76,8 @@ const fieldMapping = {
     'ÜbungRüstung': { jsonPath: 'system.traits.armorProf.value', type: 'listProfArmor', maxListItems: 6 },
     'AttributZauberwirken': { type: 'calculateValue', calcFunction: 'charSpellAttr' },
     'Zauberklasse': { type: 'calculateValue', calcFunction: 'charSpellClass' },
+    'ZauberRettungswurfSG': { type: 'calculateValue', calcFunction: 'charSpellSaveDC' },
+    'ZauberAngriffsbonus': { type: 'calculateValue', calcFunction: 'charSpellAttackmod' },
 
 };
 module.exports = { fieldMapping };
