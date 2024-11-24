@@ -165,7 +165,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
             case 'list':
                 let i = 1;
                 console.log(value);
-                for (let listItem in value) {
+                for (const listItem of value) {
                     console.log(i);
                     console.log(field);
                     console.log(field + i);
