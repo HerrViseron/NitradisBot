@@ -172,8 +172,15 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 }
                 break;
             case 'listProfWeapons':
+
                 break;
             case 'listProfArmor':
+                if (value.length > 0) {
+                    pdfData['LeichteRüstungProf'] = value.includes('lgt');
+                    pdfData['MittlereRüstungProf'] = value.includes('med');
+                    pdfData['SchwereRüstungProf'] = value.includes('hvy');
+                    pdfData['SchildeProf'] = value.includes('shl');
+                }
                 break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
