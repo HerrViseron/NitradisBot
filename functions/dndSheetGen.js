@@ -239,7 +239,6 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'list':
                 let i = 1;
-                console.log(value);
                 for (const listItem of value) {
                     pdfData[field + i] = listItem.charAt(0).toUpperCase() + listItem.slice(1); //Making the first Char uppercase
                     i++;
