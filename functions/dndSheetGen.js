@@ -192,10 +192,10 @@ function fillMultiple(jsonData, fillFunction) {
             //get Spellcasting Attr
             const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
             //Get the total Level of the char
-            let charClassLevel = [];
+            let charClassLevels = [];
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
             for (const charClass of charClasses) {
-                charClassLevel[charClass.system.identifier] += charClass.system.levels;
+                charClassLevels[charClass.system.identifier] = charClass.system.levels;
             }
 
             //Get the main Spellcasting class
@@ -204,8 +204,8 @@ function fillMultiple(jsonData, fillFunction) {
                 item.system.spellcasting.ability === spellAttr
             ); //Get class of char which has the right spell attribute, Note: the first one will be used in case there are multiple classes with the same attribute
 
-            console.log(charClassLevel);
-            console.log(charSpellClass.system.identifier);
+            console.log(charClassLevels);
+            console.log(charSpellClass);
 
 /* These Values are currently not necessary but i'll keep the code here, just in case.....
             // Known Cantrips:
