@@ -251,7 +251,7 @@ function fillMultiple(jsonData, fillFunction) {
                 case 'druid':
                 case 'sorcerer':
                 case 'wizard':
-                    availableSpellSlots = slotsByLevel[]
+                    //availableSpellSlots = slotsByLevel[]
                     break;
                 case 'bard':
                 case 'paladin':
