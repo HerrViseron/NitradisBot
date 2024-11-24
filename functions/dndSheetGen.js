@@ -128,7 +128,6 @@ function calculateValue(jsonData, calcFunction) {
         }
         case 'charSpellClass': {
             const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
-            let charClassNames = '';
             const charClasses = jsonData.items.filter(item => 
                 item.type === 'class' &&
                 item.system.spellcasting.ability === spellAttr
@@ -187,11 +186,91 @@ function calculateValue(jsonData, calcFunction) {
     }
 }
 
+function fillMultiple(jsonData, fillFunction) {
+    switch (fillFunction) {
+        case 'charSpellsKnown':
+            //get Spellcasting Attr
+            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+
+            //Get the total Level of the char
+            let charClassLevel = [];
+            const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
+            for (const charClass of charClasses) {
+                charClassLevel[charClass.system.identifier] += charClass.system.levels;
+            }
+
+            //Get the main Spellcasting class
+            const charSpellClass = jsonData.items.filter(item => 
+                item.type === 'class' &&
+                item.system.spellcasting.ability === spellAttr
+            ).system.identifier; //Get class of char which has the right spell attribute, Note: the first one will be used in case there are multiple classes with the same attribute
+
+            console.log(charClassLevel);
+            console.log(charSpellClass);
+
+/* These Values are currently not necessary but i'll keep the code here, just in case.....
+            // Known Cantrips:
+            const charKnownCantrips = charSpellClass.system.advancement.filter(advancement => 
+                advancement.type === 'ScaleValue' &&
+                advancement.configuration.identifier === 'cantrips-known'
+            ).scale;
+            // Known Spells:
+            const charKnownSpells = charSpellClass.system.advancement.filter(advancement => 
+                advancement.type === 'ScaleValue' &&
+                advancement.configuration.identifier === 'spells-known'
+            ).scale;
+*/
+            // List of the Spell Slots available to all classes
+            const slotsByLevel = {
+                0:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                1:  [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+                2:  [0, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+                3:  [0, 4, 2, 0, 0, 0, 0, 0, 0, 0],
+                4:  [0, 4, 3, 0, 0, 0, 0, 0, 0, 0],
+                5:  [0, 4, 3, 2, 0, 0, 0, 0, 0, 0],
+                6:  [0, 4, 3, 3, 0, 0, 0, 0, 0, 0],
+                7:  [0, 4, 3, 3, 1, 0, 0, 0, 0, 0],
+                8:  [0, 4, 3, 3, 2, 0, 0, 0, 0, 0],
+                9:  [0, 4, 3, 3, 3, 1, 0, 0, 0, 0],
+                10: [0, 4, 3, 3, 3, 2, 0, 0, 0, 0],
+                11: [0, 4, 3, 3, 3, 2, 1, 0, 0, 0],
+                12: [0, 4, 3, 3, 3, 2, 1, 0, 0, 0],
+                13: [0, 4, 3, 3, 3, 2, 1, 1, 0, 0],
+                14: [0, 4, 3, 3, 3, 2, 1, 1, 0, 0],
+                15: [0, 4, 3, 3, 3, 2, 1, 1, 1, 0],
+                16: [0, 4, 3, 3, 3, 2, 1, 1, 1, 0],
+                17: [0, 4, 3, 3, 3, 2, 1, 1, 1, 1],
+                18: [0, 4, 3, 3, 3, 3, 1, 1, 1, 1],
+                19: [0, 4, 3, 3, 3, 3, 2, 1, 1, 1],
+                20: [0, 4, 3, 3, 3, 3, 2, 2, 1, 1],
+            };
+
+            let availableSpellSlots = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            switch (charSpellClass.name) {
+                case 'cleric':
+                case 'druid':
+                case 'sorcerer':
+                case 'wizard':
+                    availableSpellSlots = slotsByLevel[]
+                    break;
+                case 'bard':
+                case 'paladin':
+                case 'ranger':
+                    break;
+                case 'warlock':
+                    break;
+            }
+
+            break;
+        
+    }
+}
+
 function convertJsonToPdfData(jsonData, pdfFieldMapping) {
     const pdfData = {};
 
     for (let field in pdfFieldMapping) {
-        const { jsonPath, type, attr, append, calcFunction} = pdfFieldMapping[field];
+        const { jsonPath, type, attr, append, calcFunction, fillFunction} = pdfFieldMapping[field];
         let value = 0;
         if(type != 'calculateValue'){ //when we calculate the Value, we dont have a specific JSON Path to search for
             value = getValueFromJsonByPath(jsonData, jsonPath);
@@ -235,7 +314,10 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 }
                 break;
             case 'calculateValue':
-                pdfData[field] = calculateValue(jsonData, calcFunction).toString(); // getting the value with a calculation function and always convert to string
+                pdfData[field] = calculateValue(jsonData, fillFunction).toString(); // getting the value with a calculation function and always convert to string
+                break;
+            case 'fillMultiple':
+                fillMultiple(jsonData, calcFunction); //The value mapping and filling data into the fields is handled in the function itself. Most of the functions here are very specific and only apply to one case!
                 break;
             case 'list':
                 let i = 1;

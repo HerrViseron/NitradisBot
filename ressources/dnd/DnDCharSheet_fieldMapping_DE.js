@@ -78,6 +78,7 @@ const fieldMapping = {
     'Zauberklasse': { type: 'calculateValue', calcFunction: 'charSpellClass' },
     'ZauberRettungswurfSG': { type: 'calculateValue', calcFunction: 'charSpellSaveDC' },
     'ZauberAngriffsbonus': { type: 'calculateValue', calcFunction: 'charSpellAttackmod' },
+    'ZauberBekannt': { type: 'fillMultiple', fillFunction: 'charSpellsKnown' },
 
 };
 module.exports = { fieldMapping };
