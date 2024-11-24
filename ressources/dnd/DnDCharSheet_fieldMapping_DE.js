@@ -74,5 +74,8 @@ const fieldMapping = {
     'Sprache': { jsonPath: 'system.traits.languages.value', type: 'list', maxListItems: 6} ,
     'ÜbungWaffen': { jsonPath: 'system.traits.weaponProf.value', type: 'listProfWeapons', maxListItems: 6 },
     'ÜbungRüstung': { jsonPath: 'system.traits.armorProf.value', type: 'listProfArmor', maxListItems: 6 },
+    'AttributZauberwirken': { type: 'calculateValue', calcFunction: 'charSpellAttr' },
+    'Zauberklasse': { type: 'calculateValue', calcFunction: 'charSpellClass' },
+
 };
 module.exports = { fieldMapping };

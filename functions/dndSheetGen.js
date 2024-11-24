@@ -18,7 +18,7 @@ function calculateValue(jsonData, calcFunction) {
             let charClassNames = '';
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
             for (const charClass of charClasses) {
-                if (charClassNames != '') charClassNames += '; '; //If there is already a class in the strin then append with a semicolon and a whitespace
+                if (charClassNames != '') charClassNames += '; '; //If there is already a class in the string then append with a semicolon and a whitespace
                 charClassNames += `${charClass.name} ${charClass.system.levels}`; //append the class and Level to the string
             }
             return charClassNames;
@@ -107,6 +107,35 @@ function calculateValue(jsonData, calcFunction) {
 
             return charArmorClassValue;
         }
+        case 'charSpellAttr': {
+            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+            switch (spellAttr) {
+                case 'str':
+                    return 'Stärke';
+                case 'dex':
+                    return 'Geschicklichkeit';
+                case 'con':
+                    return 'Konstitution';
+                case 'int':
+                    return 'Intelligenz';
+                case 'wis':
+                        return 'Weisheit';
+                case 'cha':
+                    return 'Charisma';
+                default:
+                    return '';
+            }
+        }
+        case 'charSpellClass': {
+            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+            let charClassNames = '';
+            const charClasses = jsonData.items.filter(item => 
+                item.type === 'class' &&
+                item.system.spellcasting.ability === spellAttr
+            ); //Get class of char which has the right spell attribute, Note: the first one will be used in case there are multiple classes with the same attribute
+            
+            return charClasses[0].name;
+        }
         default:
             return 0;
     }
@@ -172,7 +201,11 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 }
                 break;
             case 'listProfWeapons':
-
+                if (value.length > 0) {
+                    pdfData['EinfachWaffenProf'] = value.includes('sim');
+                    pdfData['KriegswaffenProf'] = value.includes('mar');
+                }
+                // TODO: Other Weapons that are part of the categories above, but when the char is not proficient in the whole category
                 break;
             case 'listProfArmor':
                 if (value.length > 0) {
