@@ -71,5 +71,8 @@ const fieldMapping = {
     'GesamtTW': { type: 'calculateValue', calcFunction: 'hitDice'},
     //Armor Class, this is difficult becaus it has a lot of different calculations...
     'Rüstungsklasse': { type: 'calculateValue', calcFunction: 'armorClass'},
+    'Sprache': { jsonPath: 'system.traits.languages.value', type: 'list', maxListItems: 6} ,
+    'ÜbungWaffen': { jsonPath: 'system.traits.weaponProf.value', type: 'listProfWeapons', maxListItems: 6 },
+    'ÜbungRüstung': { jsonPath: 'system.traits.armorProf.value', type: 'listProfArmor', maxListItems: 6 },
 };
 module.exports = { fieldMapping };

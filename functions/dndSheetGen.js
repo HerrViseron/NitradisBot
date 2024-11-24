@@ -165,6 +165,17 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
             case 'calculateValue':
                 pdfData[field] = calculateValue(jsonData, calcFunction).toString(); // getting the value with a calculation function and always convert to string
                 break;
+            case 'list':
+                let i = 1;
+                for (listItem in value) {
+                    pdfData[field + i] = listItem;
+                    if (i >= 6){ break; }
+                }
+                break;
+            case 'listProfWeapons':
+                break;
+            case 'listProfArmor':
+                break;
             default:
                 pdfData[field] = value; // Standardmäßig den Wert direkt übernehmen
         }
