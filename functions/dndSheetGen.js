@@ -188,10 +188,11 @@ function calculateValue(jsonData, calcFunction) {
 
 function fillMultiple(jsonData, fillFunction) {
     switch (fillFunction) {
-        case 'charSpellsKnown':
+        case 'charSpellSlots':
+            console.log('charSpellSlots');
+            console.log(jsonData);
             //get Spellcasting Attr
             const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
-
             //Get the total Level of the char
             let charClassLevel = [];
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
