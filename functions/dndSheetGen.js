@@ -321,7 +321,7 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'fillMultiple':
                 console.log('fillMultiple');
-                fillMultiple(jsonData, fillFunction); //The value mapping and filling data into the fields is handled in the function itself. Most of the functions here are very specific and only apply to one case!
+                //fillMultiple(jsonData, fillFunction); //The value mapping and filling data into the fields is handled in the function itself. Most of the functions here are very specific and only apply to one case!
                 break;
             case 'list':
                 let i = 1;
