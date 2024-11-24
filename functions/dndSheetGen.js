@@ -192,7 +192,7 @@ function fillMultiple(jsonData, fillFunction) {
             console.log('charSpellSlots');
             console.log(jsonData);
             //get Spellcasting Attr
-            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
+/*            const spellAttr = getValueFromJsonByPath(jsonData, 'system.attributes.spellcasting');
             //Get the total Level of the char
             let charClassLevel = [];
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
@@ -208,7 +208,7 @@ function fillMultiple(jsonData, fillFunction) {
 
             console.log(charClassLevel);
             console.log(charSpellClass);
-
+*/
 /* These Values are currently not necessary but i'll keep the code here, just in case.....
             // Known Cantrips:
             const charKnownCantrips = charSpellClass.system.advancement.filter(advancement => 
@@ -222,6 +222,8 @@ function fillMultiple(jsonData, fillFunction) {
             ).scale;
 */
             // List of the Spell Slots available to all classes
+            // Sources: https://fexlabs.com/5eslots/
+            //https://solonarv.github.io/5e-slot-calculator + https://github.com/Solonarv/solonarv.github.io/blob/source/5e-slot-calculator.html
             const slotsByLevel = {
                 0:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 1:  [0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -245,7 +247,7 @@ function fillMultiple(jsonData, fillFunction) {
                 19: [0, 4, 3, 3, 3, 3, 2, 1, 1, 1],
                 20: [0, 4, 3, 3, 3, 3, 2, 2, 1, 1],
             };
-
+/*
             let availableSpellSlots = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             switch (charSpellClass.name) {
                 case 'cleric':
@@ -261,7 +263,7 @@ function fillMultiple(jsonData, fillFunction) {
                 case 'warlock':
                     break;
             }
-
+*/
             break;
         
     }
