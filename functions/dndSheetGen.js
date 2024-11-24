@@ -73,8 +73,6 @@ function calculateValue(jsonData, calcFunction) {
                     effect.changes.some(change => change.key === 'system.attributes.ac.calc')
                 ); //now we have the effect separated that is enabled and affects the AC
                 const armorChange = armorEffect?.changes.find(change => change.key === 'system.attributes.ac.calc'); //Get the right change, there might be more than one change but only one should effect the AC 
-                console.log("The Armor Change:");
-                console.log(armorChange);
                 charArmorClassCalcType = armorChange ? armorChange.value : "default"; //Here we finally have the ArmorClass Calculation Type
             }
             
@@ -83,7 +81,6 @@ function calculateValue(jsonData, calcFunction) {
                 item.type === 'equipment' &&
                 item.system.armor.value != null //only include equiment that gives Armor
             ); //Get all equipment items of char, that are equipped
-            console.log(charArmorEquipment);
 
             //Calculating the actual ArmorClass...
             //First we always need the Dex Modifier of the char:
@@ -167,7 +164,12 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 break;
             case 'list':
                 let i = 1;
+                console.log(value);
                 for (listItem in value) {
+                    console.log(i);
+                    console.log(field);
+                    console.log(field + i);
+                    console.log(listItem);
                     pdfData[field + i] = listItem;
                     if (i >= 6){ break; }
                 }
