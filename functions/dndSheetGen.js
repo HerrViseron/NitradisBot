@@ -166,12 +166,9 @@ function convertJsonToPdfData(jsonData, pdfFieldMapping) {
                 let i = 1;
                 console.log(value);
                 for (const listItem of value) {
-                    console.log(i);
-                    console.log(field);
-                    console.log(field + i);
-                    console.log(listItem);
-                    pdfData[field + i] = listItem;
-                    if (i >= 6){ break; }
+                    pdfData[field + i] = listItem.charAt(0).toUpperCase() + listItem.slice(1); //Making the first Char uppercase
+                    i++;
+                    if (i >= 6){ break; } // There are only 6 Fields on the Char sheet, so we need to break at 6
                 }
                 break;
             case 'listProfWeapons':
