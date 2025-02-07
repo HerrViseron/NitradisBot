@@ -44,7 +44,8 @@ function calculateValue(jsonData, calcFunction) {
             const charClasses = jsonData.items.filter(item => item.type === 'class'); //Get all char classes
             for (const charClass of charClasses) {
                 if (charHitDice != '') charHitDice += ' + '; //If there is already a class in the strin then append with a semicolon and a whitespace
-                charHitDice += `${charClass.system.levels}x${charClass.system.hitDice.replaceAll('d',"W")}`; //Hit Dice times Class Level and change d to W for German
+                //charHitDice += `${charClass.system.levels}x${charClass.system.hitDice.replaceAll('d',"W")}`; //Hit Dice times Class Level and change d to W for German
+                charHitDice += ${charClass.system.levels}; // Die TW Typen können aktuell nicht ermittelt werden...
             }
             return charHitDice;
         }
@@ -206,6 +207,8 @@ function fillMultiple(jsonData, fillFunction) {
 
             console.log(charClassLevels);
             console.log(charSpellClass);
+
+            //calculating the effective Char level is the next step and based on that level we can pick the right line in the table below
 
 /* These Values are currently not necessary but i'll keep the code here, just in case.....
             // Known Cantrips:
