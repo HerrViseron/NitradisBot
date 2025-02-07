@@ -45,7 +45,7 @@ function calculateValue(jsonData, calcFunction) {
             for (const charClass of charClasses) {
                 if (charHitDice != '') charHitDice += ' + '; //If there is already a class in the strin then append with a semicolon and a whitespace
                 //charHitDice += `${charClass.system.levels}x${charClass.system.hitDice.replaceAll('d',"W")}`; //Hit Dice times Class Level and change d to W for German
-                charHitDice += ${charClass.system.levels}; // Die TW Typen können aktuell nicht ermittelt werden...
+                charHitDice += charClass.system.levels; // Die TW Typen können aktuell nicht ermittelt werden...
             }
             return charHitDice;
         }
