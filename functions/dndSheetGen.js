@@ -133,7 +133,7 @@ function calculateValue(jsonData, calcFunction) {
                 item.type === 'class' &&
                 item.system.spellcasting.ability === spellAttr
             ); //Get class of char which has the right spell attribute, Note: the first one will be used in case there are multiple classes with the same attribute
-            
+            console.log(charClasses);
             return charClasses[0].name;
         }
         case 'charSpellSaveDC': {
