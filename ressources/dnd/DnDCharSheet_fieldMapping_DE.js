@@ -75,10 +75,10 @@ const fieldMapping = {
     'ÜbungWaffen': { jsonPath: 'system.traits.weaponProf.value', type: 'listProfWeapons', maxListItems: 6 },
     'ÜbungRüstung': { jsonPath: 'system.traits.armorProf.value', type: 'listProfArmor', maxListItems: 6 },
     'AttributZauberwirken': { type: 'calculateValue', calcFunction: 'charSpellAttr' },
-    'Zauberklasse': { type: 'calculateValue', calcFunction: 'charSpellClass' },
-    'ZauberRettungswurfSG': { type: 'calculateValue', calcFunction: 'charSpellSaveDC' },
-    'ZauberAngriffsbonus': { type: 'calculateValue', calcFunction: 'charSpellAttackmod' },
-    'Zauberplätze': { type: 'fillMultiple', fillFunction: 'charSpellSlots' },
+//    'Zauberklasse': { type: 'calculateValue', calcFunction: 'charSpellClass' },
+//   'ZauberRettungswurfSG': { type: 'calculateValue', calcFunction: 'charSpellSaveDC' },
+//    'ZauberAngriffsbonus': { type: 'calculateValue', calcFunction: 'charSpellAttackmod' },
+//    'Zauberplätze': { type: 'fillMultiple', fillFunction: 'charSpellSlots' },
 
 };
 module.exports = { fieldMapping };
