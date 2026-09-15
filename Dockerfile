@@ -1,6 +1,6 @@
-FROM node:lts-slim
+FROM amd64/node:lts-slim
 
-LABEL org.opencontainers.image.authors="kontakt@viseron.de"
+LABEL org.opencontainers.image.authors="v+kontakt@viseron.de"
 
 RUN apt-get update && \
 	apt-get install -y procps && \
