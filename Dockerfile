@@ -1,4 +1,4 @@
-FROM amd64/node:lts-slim
+FROM arm64v8/node:lts-slim
 
 LABEL org.opencontainers.image.authors="v+kontakt@viseron.de"
 
