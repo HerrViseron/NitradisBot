@@ -12,7 +12,7 @@ WORKDIR /usr/src/nitradisbot
 
 COPY --chown=node:node . .
 
-RUN rm Dockerfile && \
+RUN rm ./Dockerfile && \
 	npm install pm2 -g && \
 	npm ci --omit=dev && \
 	mkdir /var/lib/nitradisbot/ && \
